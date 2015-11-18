@@ -1,0 +1,65 @@
+/* Empty. Add your own CSS if you like */
+
+.force-no-padding {
+    padding:0px !important;
+}
+
+.force-no-padding-left15 {
+    padding-top:0px !important;
+    padding-left:15px !important;
+    padding-bottom:0px !important;
+    padding-right:0px !important;
+}
+
+.force-no-padding-top5 {
+    padding-top:5px !important;
+    padding-left:0px !important;
+    padding-bottom:0px !important;
+    padding-right:0px !important;   
+}
+
+.force-no-padding-top10 {
+    padding-top:10px !important;
+    padding-left:0px !important;
+    padding-bottom:0px !important;
+    padding-right:0px !important;   
+}
+
+.force-height-40 {
+    height:40px !important;
+}
+
+.force-readonly {
+    background-color:#ffffff !important;
+}
+
+.force-padding-right20 {
+    padding-right:20px !important;
+}
+
+.force-width60 {
+    width:60px !important;
+}
+
+.col-fixed-40 {
+    width:40px !important;  
+}
+
+.col-fixed-400 {
+    width:400px !important;  
+}
+
+.avatar-frame-small img {
+    width:40px;
+    height:40px;
+    -webkit-border-radius: 50%; /* Saf3+, Chrome */
+    /* Opera 10.5, IE 9 */
+    border-radius: 50%;  
+    /*-moz-border-radius: 30px;  Disabled for FF1+ */
+}
+
+
+.col-fixed-40 {
+    width:40px !important;  
+}
+

@@ -1,0 +1,39 @@
+<ion-view view-title="消息">
+<ion-nav-buttons side="right">
+<button class="button button-icon icon ion-more" ng-click="popover.show($event)"></button>
+</ion-nav-buttons>
+<ion-content>
+<ion-refresher pulling-text="下拉刷新" on-refresh="loadNew()">
+</ion-refresher>
+<div ng-show="messages.list == null" class="card">
+    <div class="item item-text-wrap" style="text-align:center;">
+    无消息
+    </div>
+</div>
+<ion-list>
+<a class="item" ng-repeat="item in messages.list" href="#/main/messages/{{item.id}}">
+        <div class="row force-no-padding">
+            <div class="col avatar-frame-small force-no-padding">
+                <div class="row force-no-padding">
+                    <div class="col-fixed-40 force-no-padding">
+                        <img ng-if="item.senderHead == null" ng-src="img/default.png">
+                        <img ng-if="item.senderHead != null" ng-src="{{item.senderHead}}">
+                    </div>
+                    <div class="col force-no-padding-left15">
+                        <div class="row force-no-padding">
+                            {{item.title}}
+                        </div>
+                        <div class="row force-no-padding-top10">
+                            <p>{{item.senderName}}&nbsp;&nbsp;&nbsp;{{item.time}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>
+</ion-list>
+<ion-infinite-scroll distance="10%" on-infinite="loadOld()">
+</ion-infinite-scroll>
+</ion-content>
+</ion-view>
+

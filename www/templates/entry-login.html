@@ -1,0 +1,30 @@
+<ion-view hide-nav-bar="true">
+<ion-content class="padding">
+<div class="list list-inset">
+<label class="item item-input">
+    <span class="input-label">用户名</span>
+    <input type="text" ng-model="userinfo.username" required ng-disabled="logging">
+</label>
+
+<label class="item item-input">
+    <span class="input-label">密码</span>
+    <input type="password" ng-model="userinfo.pwd" ng-disabled="logging">
+</label>
+
+<!--
+<div class="item item-checkbox">
+    <label class="checkbox">
+        <input type="checkbox" ng-model="userinfo.remember"></input>
+    </label>
+    记住登录信息
+</div>
+-->
+
+    <button class="button button-block button-positive" 
+        ng-click="login()" >
+        登入
+    </button>
+</div>
+</ion-content>
+</ion-view>
+

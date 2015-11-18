@@ -1,0 +1,14 @@
+<div class="modal">
+    <div class="bar bar-header bar-positive">
+        <div class="button button-clear" ng-click="exitContacts()">
+            <span class="icon ion-close"></span>
+        </div>
+        <h1 class="title">选择收件人</h1>
+        <div class="button button-clear" ng-click="ok()">
+            <span class="icon ion-checkmark-round"></span>
+        </div>
+    </div>
+    <ion-content class="has-header">
+        <ion-tree-list template-url="templates/ion-item-tmpl.html" items="contactList" collapsed="true"></ion-tree-list>
+    </ion-content>
+</div>
