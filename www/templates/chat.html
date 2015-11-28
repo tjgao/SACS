@@ -1,0 +1,29 @@
+<ion-view view-title="聊天室" cache-view="false">
+<ion-content>
+<div class="message-wrapper" ng-repeat="msg in messages">
+    <div ng-if="$root.user.uid != msg.uid">
+        <img ng-if="msg.headimg == null" class="profile-pic left" ng-src="img/default.jpg"/>
+        <img ng-if="msg.headimg != null" class="profile-pic left" ng-src="{{msg.headimg}}"/>
+        <div class="chat-bubble left">
+            <div class="message">{{msg.text}}</div>
+            <div class="message-detail">
+                <span class="bold">——  {{msg.realname}}</span>
+                <span am-time-ago="msg.time"></span>
+            </div>
+        </div>
+    </div>
+
+    <div ng-if="$root.user.uid == msg.uid">
+        <img ng-if="msg.headimg == null" class="profile-pic right" ng-src="img/default.jpg"/>
+        <img ng-if="msg.headimg != null" class="profile-pic right" ng-src="{{msg.headimg}}"/>
+        <div class="chat-bubble right">
+            <div class="message">{{msg.text}}</div>
+            <div class="message-detail">
+                <span class="bold">——  {{msg.realname}}</span>
+                <span am-time-ago="msg.time"></span>
+            </div>
+        </div>
+    </div>
+</div>
+</ion-content>
+</ion-view>

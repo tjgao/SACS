@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'ionic-toast', 'courseControllers', 'courseServices', 'ion-tree-list'])
+angular.module('starter', ['ionic', 'ionic-toast', 'courseControllers', 'courseServices', 'ion-tree-list', 'ngCordova'])
 
 .config(function($httpProvider){
     $httpProvider.defaults.timeout = 5000;
@@ -32,7 +32,7 @@ angular.module('starter', ['ionic', 'ionic-toast', 'courseControllers', 'courseS
     });
 })
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $ionicHistory, $ionicPopup) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -45,6 +45,28 @@ angular.module('starter', ['ionic', 'ionic-toast', 'courseControllers', 'courseS
       StatusBar.styleDefault();
     }
   });
+  
+    $ionicPlatform.registerBackButtonAction(function(e){
+        var cname = $ionicHistory.currentStateName();
+        if( cname == 'main.list' || cname == 'main.info' || cname == 'main.messages' || cname == 'main.config' || cname == 'login') {
+            e.preventDefault();
+            $ionicPopup.confirm({
+                title:'提示',
+                subTitle:'确定退出程序？',
+                okText:'退 出',
+                okType:'button-positive',
+                cancelText:'取 消'
+            }).then(function(res){
+                if( res ) {
+                    window.close();
+                    ionic.Platform.exitApp();
+                }
+            });
+        } else {
+            $ionicHistory.goBack();
+        }
+    }, 101); 
+
 })
 
 .run(function($rootScope, $ionicLoading){
@@ -83,6 +105,34 @@ angular.module('starter', ['ionic', 'ionic-toast', 'courseControllers', 'courseS
             'clistsView':{
                 templateUrl:'templates/clists.html',
                 controller:'clistsController'
+            }
+        }
+    })
+    .state('main.course',{
+        url:'/courseSession',
+        abstract:true,
+        views:{
+            'clistsView':{
+                templateUrl:'templates/course.html',
+                controller:'courseSessionMenuCtrl'
+            }
+        }
+    })
+    .state('main.course.content',{
+        url:'/content/:sId',
+        views:{
+            'courseContentView':{
+                templateUrl:'templates/course-content.html',
+                controller:'courseSessionController'
+            }
+        }
+    })
+    .state('main.course.chat',{
+        url:'/chat/:sId',
+        views:{
+            'courseContentView':{
+                templateUrl:'templates/chat.html',
+                controller:'chatController'
             }
         }
     })
@@ -131,14 +181,7 @@ angular.module('starter', ['ionic', 'ionic-toast', 'courseControllers', 'courseS
             }
         }
     })
-//    .state('register', {
-//        url:'/register',
-//        views:{
-//            'mainView':{
-//                templateUrl:'templates/entry-register.html'
-//            }
-//        }
-//    })
+
     ;
 
   // if none of the above states are matched, use this as the fallback

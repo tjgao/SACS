@@ -1,4 +1,4 @@
-<ion-view view-title="消息">
+<ion-view view-title="消息" cache-view="false">
 <ion-nav-buttons side="right">
 <button class="button button-icon icon ion-more" ng-click="popover.show($event)"></button>
 </ion-nav-buttons>
@@ -24,7 +24,7 @@
                             {{item.title}}
                         </div>
                         <div class="row force-no-padding-top10">
-                            <p>{{item.senderName}}&nbsp;&nbsp;&nbsp;{{item.time}}</p>
+                            <p>{{item.senderName}}&nbsp;&nbsp;&nbsp;{{item.time | date:'yyyy-MM-dd HH:mm:ss '}}</p>
                         </div>
                     </div>
                 </div>

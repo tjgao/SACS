@@ -1,0 +1,47 @@
+<ion-view  id="courseSessionView" view-title="{{courseSession.name}}"  >
+<ion-nav-title>
+{{courseSession.name}}
+</ion-nav-title>
+<ion-content >
+<ion-list>
+<div class="item item-avatar">
+    <img ng-if="courseSession.lecturerHeader == null" ng-src="img/default.png">
+    <img ng-if="courseSession.lecturerHeader != null" ng-src="{{courseSession.lecturerHeader}}">
+    <h2>{{courseSession.lecturer}}</h2>
+    <p>任课教师</p>
+</div>
+<div class="item item-divider item-icon-right">
+    教师机状态
+    <i ng-if="" class="icon icon-checkmark"></i>
+</div>
+<div ng-if="identity.iamlecturer==0 && signature.signed" class="item item-divider item-icon-right">
+    已签到
+    <i class="icon ion-checkmark"></i> 
+</div>
+<div ng-if="identity.iamlecturer==0 && !signature.signed" class="item item-divider item-icon-right">
+    未签到
+</div>
+<div ng-if="identity.iamlecturer==1" class="item item-icon-left">
+    <i class="icon icon-file-powerpoint-o"></i>
+    PPT开关
+</div>
+
+<div ng-if="identity.iamlecturer==1" class="item item-icon-left">
+    <i class="icon ion-image"></i>
+    图片开关
+</div>
+<div ng-if="identity.iamlecturer==1" class="item item-icon-left">
+    <i class="icon ion-monitor"></i>
+    上课
+</div>
+<div class="item item-divider" ng-if="courseSession.swlist.length > 0">
+    课件
+</div>
+<div class="item item-icon-right item-icon-left" ng-repeat="csw in courseSession.swlist">
+    <i class="icon ion-ios-download-outline" ng-click="download('{{csw.filename}}')"></i>
+    <div ng-click="download('{{csw.filename}}')">{{csw.name}}</div>
+    <i ng-if="identity.iamlecturer==1" class="icon icon-arrow-circle-right" ng-click="pcdownload('{{csw.filename}}')"></i>
+</div>
+</ion-list> 
+</ion-content>
+</ion-view>

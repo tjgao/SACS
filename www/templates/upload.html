@@ -1,0 +1,26 @@
+<div class="modal">
+    <div class="bar bar-header bar-positive">
+        <h1 class="title">文件传输</h1>
+        <div class="button button-clear" ng-click="exitUpload()">
+            <span class="icon ion-close"></span>
+        </div>
+    </div>
+    <ion-content class="has-header">
+    <div class="list list-inset">
+        <label class="item item-input">
+            <span class="input-label force-width70">显示名</span>
+            <input type="text" placeholder="显示名" ng-model="uploadFile.name">
+        </label>
+        <div class="item item-input item-icon-right">
+            <span class="input-label force-width70">路径</span>
+            <input type="text" class="force-readonly" placeholder="路径" readonly  ng-model="uploadFile.path">
+            <i class="icon ion-ios-search" ng-click="fileChoose()">
+            </i>
+        </div>
+        <label class="item item-input">
+            <textarea rows="10" ng-model="uploadFile.desc" placeholder="描述"></textarea>
+        </label>
+        <button class="button button-block button-positive" ng-click="doUpload()">上传</button>
+    </div>
+    </ion-content>
+</div>

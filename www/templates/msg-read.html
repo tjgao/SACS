@@ -10,10 +10,10 @@
                     </div>
                     <div class="col force-no-padding-left15">
                         <div class="row force-no-padding">
-                            高等数学A答疑时间
+                            {{message.title}}
                         </div>
                         <div class="row force-no-padding-top10">
-                            <p>白玥 &nbsp;&nbsp;&nbsp;2015-11-11 15:15:15</p>
+                            <p>{{message.senderName}} &nbsp;&nbsp;&nbsp;{{message.time| date:'yyyy-MM-dd HH:mm:ss '}}</p>
                         </div>
                     </div>
                     <div class="force-no-padding-left15" style="tex-align:right">
@@ -24,10 +24,7 @@
         </div>
     </div>
     <div class="item item-text-wrap">
-        <pre>在MAC端开发安卓程序也有半年了 ，现在开始做java web开发。 目前用的软件最主要的是Intellij idea,这真是写java的利器啊。
-
-安卓的模拟器用的是Genymotion，完爆谷歌的模拟器好几条街。Visual Json用来解析Json格式的数据。Filezilla用来登录FTP.这些都是我一点一点积累起来的，好的开发软件真的可以让编程事半功倍
-            </pre>
+        <pre>{{message.content}}</pre>
     </div>
 </div>
 </ion-content>

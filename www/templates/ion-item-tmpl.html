@@ -6,5 +6,7 @@
     </span>
     {{item.realname}}
     </div>
-        <ion-checkbox ng-model="item.checked" ng-change="contactChanged()" ion-stop-event="click"></ion-checkbox>
+        <label class="checkbox" ng-hide="item.sessionId">
+        <input type="checkbox" ng-model="item.checked" ng-change="contactChanged()" ion-stop-event="click"></input>
+        </label>
 </div>
