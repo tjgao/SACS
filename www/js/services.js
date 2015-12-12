@@ -59,19 +59,163 @@ angular.module('courseServices', [])
                             "Authorization":"Bearer " + token
                         }
                     });
+                },
+        getsignature: function(sId, server, token) {
+                          return $http({
+                              url: server + '/api/signature/get/' + sId,
+                              method:"GET",
+                              headers: {
+                                  "Authorization":"Bearer " + token
+                              }
+                          });
+                      },
+        /*
+        createAttend: function(sId, server, token ) {
+                          return $http({
+                              url:server + '/api/signature/create/' + sId,
+                              method:"POST",
+                              headers: {
+                                  "Authorization":"Bearer " + token
+                              }
+                          });
+                      },
+                      */
+        attend: function(code, sId, server, token) {
+                    return $http({
+                        url: server + '/api/signature/signup/' + sId + '/' + code,
+                        method:"POST",
+                        headers: {
+                            "Authorization":"Bearer " + token
+                        }
+                    });
                 }
     };
 })
 
-.factory('pcResources', function($http){
+.factory('pcResources', function($http, $cordovaFileTransfer){
     return {
-        alive: function(server, port, token) {
+        upload: function(name, ext, path, server, port, uid, token) {
+                    var options = {
+                        fileName:name + ext, 
+                        httpMethod:"POST",
+                        params:{"ext":ext, "name":name},
+                        headers:{
+                            id: uid,
+                            token: token
+                        }
+                    };
+                    return $cordovaFileTransfer.upload('http://' + server + ':' + port + '/upload', path, options);
+        },
+        watch: function( server, port ) {
+                    return $http({
+                        url:'http://'+server+':'+port+'/watch',
+                        method:'GET'
+                    });
+        },
+        pptslides: function( server, port, uid, token ) {
+                        return $http({
+                            url:'http://' + server + ':' + port + '/ppt_pages',
+                            method:'GET',
+                            headers: {
+                                id: uid,
+                                token: token
+                            }
+                        });
+                },
+        pptgoto: function(page, server, port, uid, token) {
+                     return $http({
+                         url:'http://' + server + ':' + port + '/ppt_goto',
+                         method:'GET',
+                         params:{
+                             page: page
+                         },
+                         headers: {
+                             id: uid,
+                             token: token
+                         }
+                     });
+                 },
+        pptprev: function(server, port, uid, token) {
+                     return $http({
+                         url:'http://' + server + ':' + port + '/ppt_prev',
+                         method:'GET',
+                         headers: {
+                             id: uid,
+                             token: token
+                         }
+                     });
+                 },
+        pptnext: function(server, port, uid, token) {
+                     return $http({
+                         url:'http://' + server + ':' + port + '/ppt_next',
+                         method:'GET',
+                         headers: {
+                             id: uid,
+                             token: token
+                         }
+                     });
+                 },
+        togglepic: function(server, port, uid, token ) {
+                       return $http({
+                           url: 'http://' + server + ':' + port + '/togglepic',
+                           method:'GET',
+                           headers: {
+                               id: uid,
+                               token: token
+                           }
+                       });
+                   }, 
+        toggleppt: function(server, port, uid, token) {
+                       return $http({
+                           url:'http://' + server + ':' + port + '/toggleppt',
+                           method: 'GET',
+                           headers: {
+                               id: uid,
+                               token: token
+                           }
+                       });
+                   },
+        toggleattend: function(attstr, sid, uid, server, port, token) {
+                        attstr = "attend:" + sid + ":" + attstr;
+                        return $http({
+                            url: 'http://' + server + ":" + port + '/toggleattend',
+                            method:'POST',
+                            params:{
+                                attendstr:attstr
+                            },
+                            headers:{
+                                id: uid,
+                                token: token
+                            } 
+                        });
+                    },
+        register: function(uname, nickname, headimg, server, port, uid, token) {
                    var ulr = 'http://' + server + ':' + port;
                    return $http({
-                       url: server + '/alive',
-                       method: 'GET'
+                       url: ulr + '/register',
+                       method: 'GET',
+                       params:{
+                           uname:uname,
+                           nickname:nickname,
+                           headimg:headimg
+                       },
+                       headers:{
+                           id: uid,
+                           token:token
+                       }
                    });
-               }
+               },
+        pcdownload: function(url, server, port, uid, token) {
+                        var u = 'http://' + server + ':' + port + '/downloadppt';
+                        return $http({
+                            url: u,
+                            params:{"url":url},
+                            headers:{
+                                id: uid,
+                                token:token
+                            }
+                        });
+                    }
     };
 })
 
@@ -114,7 +258,7 @@ angular.module('courseServices', [])
                             var options = {
                                 fileName:name + ext, 
                                 httpMethod:"POST",
-                                params:{"ext":ext,"name":name, "description":desc},
+                                params:{"ext":ext, "name":name, "description":desc},
                                 headers:{
                                     "Authorization":"Bearer " + token
                                 }

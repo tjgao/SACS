@@ -1,4 +1,4 @@
-<ion-view  id="courseSessionView" view-title="{{courseSession.name}}"  >
+<ion-view  id="courseSessionView" view-title="{{courseSession.name}}"  cache-view="false">
 <ion-nav-title>
 {{courseSession.name}}
 </ion-nav-title>
@@ -11,7 +11,7 @@
     <p>任课教师</p>
 </div>
 <div class="item item-divider item-icon-right">
-    教师机状态
+    教师机状态<span ng-if="auth.ip">&nbsp; : {{auth.ip}} 激活</span><span ng-if="!auth.ip">&nbsp; 未激活</span>
     <i ng-if="" class="icon icon-checkmark"></i>
 </div>
 <div ng-if="identity.iamlecturer==0 && signature.signed" class="item item-divider item-icon-right">
@@ -21,7 +21,7 @@
 <div ng-if="identity.iamlecturer==0 && !signature.signed" class="item item-divider item-icon-right">
     未签到
 </div>
-<div ng-if="identity.iamlecturer==1" class="item item-icon-left">
+<div ng-if="identity.iamlecturer==1" class="item item-icon-left" ng-click="toggleppt()">
     <i class="icon icon-file-powerpoint-o"></i>
     PPT开关
 </div>
@@ -30,7 +30,7 @@
     <i class="icon ion-image"></i>
     图片开关
 </div>
-<div ng-if="identity.iamlecturer==1" class="item item-icon-left">
+<div class="item item-icon-left" ng-click="watchslide()">
     <i class="icon ion-monitor"></i>
     上课
 </div>
