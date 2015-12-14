@@ -8,11 +8,11 @@
 angular.module('starter', ['ionic', 'ionic-toast', 'courseControllers', 'courseServices', 'ion-tree-list', 'ngCordova'])
 
 .config(function($httpProvider){
-    $httpProvider.defaults.timeout = 5000;
+    $httpProvider.defaults.timeout = 20000;
     $httpProvider.interceptors.push(function($rootScope){
         return {
             request:function(config) {
-                        config.timeout = 5000;
+                        //config.timeout = 5000;
                         $rootScope.$broadcast('loading:show');
                         return config;
                     },
@@ -128,7 +128,7 @@ angular.module('starter', ['ionic', 'ionic-toast', 'courseControllers', 'courseS
         }
     })
     .state('main.course.chat',{
-        url:'/chat/:sId',
+        url:'/chat',
         views:{
             'courseContentView':{
                 templateUrl:'templates/chat.html',

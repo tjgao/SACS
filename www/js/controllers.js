@@ -1,6 +1,6 @@
 angular.module('courseControllers', ['courseServices'])
 
-.controller('topController', function($scope, ionicToast, $ionicLoading, $localStorage, $rootScope, $cordovaFile, $ionicPlatform){
+.controller('topController', function($scope,$location, ionicToast, $ionicLoading, $localStorage, $rootScope, $cordovaFile, $ionicPlatform){
     console.log('topController called');
     $rootScope.showToast = function(msg) {
         ionicToast.show(msg, 'middle', false, 2000);
@@ -12,6 +12,13 @@ angular.module('courseControllers', ['courseServices'])
     $ionicPlatform.ready().then(function(){
         //$cordovaFile.createDir(cordova.file.externalRootDirectory, 'CourseAgent', false);
     });
+
+    $scope.$on('$stateChangeStart', function(e, to, toParams, from, fromParams){
+        if( to.name != 'main.course.chat' && from.name == 'main.course.chat') {
+            if( $rootScope.user.leaveRoomCall ) $rootScope.user.leaveRoomCall(); 
+        }
+    });
+
 })
 
 .controller('loginController', function($scope, $rootScope, $http, $location, $localStorage){
@@ -79,7 +86,7 @@ angular.module('courseControllers', ['courseServices'])
 
 })
 
-.controller('courseSessionMenuCtrl', function($scope, $rootScope, $q, $ionicHistory, $ionicSideMenuDelegate, courseSessionResources, fileChooseService, $ionicModal, $location, pcResources, authResources ){
+.controller('courseSessionMenuCtrl', function($scope, $ionicPopup, $rootScope, $q, $ionicHistory, $ionicSideMenuDelegate, courseSessionResources, fileChooseService, $ionicModal, $location, pcResources, authResources ){
 
     $scope.courseSession = {};
     $scope.auth = {};
@@ -88,6 +95,7 @@ angular.module('courseControllers', ['courseServices'])
     $scope.signature = {signed:false};
     $scope.chat = {};
     $scope.scanobj = {};
+    $scope.reg = {};
 
     $scope.courseInit= function() {
         $scope.courseSession = {};
@@ -112,7 +120,8 @@ angular.module('courseControllers', ['courseServices'])
     };
 
     $scope.chat = function() {
-        $location.path('/main/courseSession/chat/' + $scope.courseSession.sid );
+        //$location.path('/main/courseSession/chat/' + $scope.courseSession.sid );
+        $location.path('/main/courseSession/chat');
     }
 
     $scope.showbtn = function() {
@@ -130,6 +139,58 @@ angular.module('courseControllers', ['courseServices'])
         });
     };
 
+    $scope.uploadToPC = function() {
+        if( !$scope.auth.ip ) {
+            $rootScope.showToast('教师机还未激活，无法操作！');
+            return;
+        }
+        $scope.uploadFile.name = null;
+        $scope.uploadFile.path = null;
+        var popup = $ionicPopup.show({
+            templateUrl:'templates/uppopup.html',
+            title:'选择上传到教师机的文件',
+            subtitle:'支持文件类型包括PPT和图片',
+            scope:$scope,
+            buttons:[{text:'取消'},{
+                text:'<b>上传</b>',
+                type:'button-positive',
+                onTap: function(e) {
+                    if( !$scope.uploadFile.path || $scope.uploadFile.path.length == 0 ) {
+                        $rootScope.showToast('还未选择文件！');
+                        e.preventDefault();
+                    } else
+                        return 'upload';
+                }
+            }]
+        });
+
+        popup.then(function(res){
+            if( res && res == 'upload') {
+                pcResources.upload($scope.uploadFile.name, $scope.uploadFile.ext, $scope.uploadFile.path, $scope.auth.ip, $scope.auth.port, $rootScope.user.uid, $scope.auth.token).then(function(resp){
+                    if( resp.data.code == 0 ) 
+                        $rootScope.showToast('上传成功！');
+                    else
+                        $rootScope.showToast('上传失败！');
+                }, function(err){
+                    $rootScope.showToast('获取数据失败，请确保网络连接正常！');
+                });
+            }
+        });
+    };
+
+    $scope.fileChoose2 = function() {
+        fileChooseService.chooseFile([], function(uri){
+            var ext = uri.substring(uri.lastIndexOf('.'));
+            if( ext && ext.length <= 5)
+                $scope.uploadFile.ext = ext;
+            else 
+                $scope.uploadFile.ext = '.jpg'; //no ext info, best guess is that it's from gallery
+            $scope.uploadFile.path = uri;
+            $scope.uploadFile.name = uri.substring( uri.lastIndexOf('/') + 1); 
+        }, function(err){
+            $rootScope.showToast('操作中发生异常！');
+        });
+    };
 
     $scope.domodal = function(){
         if( $scope.modal) {
@@ -216,9 +277,39 @@ angular.module('courseControllers', ['courseServices'])
             console.log(err);
         })
     }
+
+    $scope.reg.register = function(qtype, callback) {
+        if( !$scope.auth.ip) {
+            $rootScope.showToast('教师机还未激活，无法操作！');
+            return;
+        }
+        pcResources.register(qtype, $rootScope.user.realname, $rootScope.user.nickname, $rootScope.user.headimg, $scope.auth.ip, $scope.auth.port, $rootScope.user.uid, $scope.auth.token).then(function(resp){
+            try{
+                if( resp.data.code == 0 ) { 
+                    $scope.auth.connected = true;
+                    $scope.registerCounter = 1;
+                    $scope.registerTimer = null;
+                    if( callback ) callback();
+                    return;
+                } 
+                //$scope.resetRegTimer();
+            } catch(err) {
+                //$scope.resetRegTimer();
+            }
+        }, function(err){
+            $rootScope.showToast('无法连接教师机，请检查网络设置！');
+            //$scope.resetRegTimer();
+        });
+    };
+
+    $scope.reg.unregister = function() {
+        pcResources.unregister($scope.auth.ip, $scope.auth.port, $rootScope.user.uid, $scope.auth.token).then(function(resp){});
+    }
 })
 
-.controller('courseSessionController', function($scope, $stateParams, $http, $location, $rootScope, courseSessionResources, $cordovaFileTransfer, $cordovaBarcodeScanner, $ionicPlatform, authResources, $cordovaFile, $interval, pcResources, $timeout, $ionicModal, $ionicScrollDelegate, $ionicSlideBoxDelegate){
+.controller('courseSessionController', function($scope, $stateParams, $http, $location, $rootScope, courseSessionResources, 
+    $cordovaFileTransfer, $cordovaBarcodeScanner, $ionicPlatform, authResources, $cordovaFile, pcResources, $timeout, 
+    $ionicModal, $ionicScrollDelegate, $ionicSlideBoxDelegate, $q){
 
     $scope.contentInit = function() {
         $scope.courseSession.sid = $stateParams.sId;
@@ -230,45 +321,85 @@ angular.module('courseControllers', ['courseServices'])
     $scope.$on('$ionicView.enter', function(scopes, states ){
         $scope.contentInit();
     });
-
-    $scope.allImages = [ ];
+    
+    $scope.allImages = [ { src : 'img/nodisplay.png'} ];
 
     $scope.zoomMin = 1;
-    $scope.watchTimer = null;
+
+    $scope.lastSlide = null;
 
     $scope.watchslide = function(){
         if( !$scope.auth.ip ) {
             $rootScope.showToast('还未连接上教师机，无法操作！');
             return;
         }
-        $scope.showModal('templates/blackboard.html');
+        $scope.reg.register('blackboard', $scope.showModal);
     }
 
-    $scope.startWatchTimer = function(time) {
-        $scope.watchTimer = $timeout(function(){
-            pcResources.watch($scope.auth.ip, $scope.auth.port).then(function(resp){
-                if( resp.data.code == 0 ) {
-                    var url = 'http://'+$scope.auth.ip+':'+$scope.auth.port+'/files/'+resp.data.data;
-                    if( !($scope.allImages && $scope.allImages.length && $scope.allImages[0].src == url) ) 
+    $scope.firstWatch = function() {
+        pcResources.fastwatch( $scope.auth.ip, $scope.auth.port, $rootScope.user.uid, $scope.auth.token ).then(function(resp){
+            if( resp.data.code != 0 ) {
+                $rootScope.showToast('无权限或者注册失败！');
+                $scope.closeModal();
+                return;
+            } 
+            else {
+                if( resp.data.data && resp.data.data.length > 0 ) {
+                    $ionicSlideBoxDelegate.enableSlide(true);
+                    if( $scope.lastSlide != resp.data.data ) {
                         $scope.allImages = [{src:'http://'+$scope.auth.ip+':'+$scope.auth.port+'/files/'+resp.data.data}];
-                }    
-                $scope.startWatchTimer(1500);
-            }, function(err) {
-                $scope.startWatchTimer(3000);
-            });
-        }, time);
+                        $scope.lastSlide = resp.data.data;
+                    }
+                }
+            }
+            $scope.cancelWatch = $q.defer();
+            $scope.startWatch($scope.cancelWatch.promise);
+        });
     }
 
-    $scope.showModal = function(templateUrl) {
+    $scope.startWatch = function(cancel) {
+        pcResources.watch(cancel, $scope.auth.ip, $scope.auth.port, $rootScope.user.uid, $scope.auth.token).then(function(resp){
+            if( resp.data.code != 0 ) {
+                $rootScope.showToast('无权限或者注册失败！');
+                $scope.closeModal();
+                return;
+            }
+            if( resp.data.data && resp.data.data.length > 0) {
+                if( resp.data.data == 'none') {
+                    $ionicSlideBoxDelegate.enableSlide(false);
+                    $scope.allImages = [ { src : 'img/nodisplay.png'} ];
+                } else {
+                    var url = 'http://'+$scope.auth.ip+':'+$scope.auth.port+'/files/'+resp.data.data;
+                    $ionicSlideBoxDelegate.enableSlide(true);
+                    if( !($scope.allImages && $scope.allImages.length && $scope.allImages[0].src == url) ) {
+                        $scope.allImages = [{src:'http://'+$scope.auth.ip+':'+$scope.auth.port+'/files/'+resp.data.data}];
+                        $scope.lastSlide = resp.data.data;
+                    }
+                }
+            } else if( !resp.data.data || resp.data.data == '' ) {
+                if( !$scope.lastSlide || $scope.lastSlide == '' ) {
+                    $scope.allImages = [ { src : 'img/nodisplay.png'} ];
+                    $ionicSlideBoxDelegate.enableSlide(false);
+                }
+            }   
+            
+            $scope.startWatch(cancel);
+        }, function(err) {
+        });
+    }
+
+    $scope.showModal = function() {
         if( !$scope.identity || !$scope.identity.iamlecturer ) {
-            $scope.startWatchTimer(0);
-            $ionicModal.fromTemplateUrl(templateUrl, { scope:$scope })
+            // for students
+            $scope.firstWatch();
+            $ionicModal.fromTemplateUrl('templates/blackboard.html', { scope:$scope })
             .then(function(modal){
                 $scope.slideModal = modal;
                 $scope.slideModal.show();
             });
             return;
         }
+        //for teacher
         pcResources.pptslides($scope.auth.ip, $scope.auth.port, $rootScope.user.uid, $scope.auth.token).then(function(resp) {
             if( resp.data.code == 0 ) {
                 var slides = resp.data.data[0];
@@ -282,7 +413,7 @@ angular.module('courseControllers', ['courseServices'])
                 for( var i = 0; i<slides; i++ ) {
                     $scope.allImages.push({ src : 'http://' + $scope.auth.ip + ':' + $scope.auth.port + '/files/' + (i+1) + '.png'} );
                 }
-                $ionicModal.fromTemplateUrl(templateUrl, { scope:$scope })
+                $ionicModal.fromTemplateUrl('templates/blackboard.html', { scope:$scope })
                 .then(function(modal){
                     $scope.slideModal = modal;
                     $scope.slideModal.show();
@@ -301,12 +432,13 @@ angular.module('courseControllers', ['courseServices'])
             var zoomFactor = $ionicScrollDelegate.$getByHandle('scrollHandle' + $scope.activeSlide ).getScrollPosition().zoom;
             if( zoomFactor && zoomFactor > $scope.zoomMin ) return;
         } catch(e){}
-        if($scope.watchTimer) {
-            $timeout.cancel($scope.watchTimer);
-            $scope.watchTimer = null;
-        }
         $scope.slideModal.hide();
         $scope.slideModal.remove();
+        $scope.reg.unregister();
+        if( $scope.cancelWatch ) {
+            $scope.cancelWatch.resolve();
+            $scope.cancelWatch = null;
+        }
     }
 
     $scope.slideChanged = function(slide) {
@@ -332,6 +464,13 @@ angular.module('courseControllers', ['courseServices'])
         });
     }
 
+    $scope.togglepic = function() {
+        pcResources.togglepic($scope.auth.ip, $scope.auth.port, $rootScope.user.uid, $scope.auth.token).then(function(resp){
+            if( resp.data.code == 0 )
+                console.log('toggle pic');
+        })
+    }
+
     $scope.getCourseInfo = function() {
         courseSessionResources.courseSession($scope.courseSession.sid, $rootScope.server, $rootScope.token).then(function(resp){
             try{
@@ -353,15 +492,15 @@ angular.module('courseControllers', ['courseServices'])
     };
 
     $scope.$on('$stateChangeStart', function(e, to, toParams, from, fromParams){
-        if( to.name == 'main.list') {
+//        if( to.name == 'main.list') {
             if( $scope.activeTimer )
                 $timeout.cancel($scope.activeTimer);
-            if( $scope.registerTimer )
-                $timeout.cancel($scope.registerTimer);
-            console.log('go back to upper level');
-        }
-        if( to.name == 'main.course.chat')
-            console.log('goto chat now');
+//            if( $scope.registerTimer )
+//                $timeout.cancel($scope.registerTimer);
+//            console.log('go back to upper level');
+//       }
+//        if( to.name == 'main.course.chat')
+//            console.log('goto chat now');
     });
 
     $scope.activated = function() {
@@ -379,6 +518,8 @@ angular.module('courseControllers', ['courseServices'])
                     $scope.auth.port = resp.data.data.port;
                     $scope.auth.sid = resp.data.data.sid;
                     $scope.auth.token = resp.data.data.token;
+
+                    //$scope.register();
                     return;
                     }
                 } 
@@ -406,36 +547,15 @@ angular.module('courseControllers', ['courseServices'])
     $scope.activeTimer = $timeout($scope.activated, 500);
     $scope.activeCounter = 1;
 
-    $scope.registerCounter = 1;
-    $scope.resetRegTimer = function() {
-        if( $scope.registerCounter < 30) {
-            $scope.registerCounter++;
-        }
-        //$interval.cancel($scope.registerTimer);
-        $scope.registerTimer = $timeout($scope.register, Math.floor(Math.random()*$scope.registerCounter+1)*1000);
-        console.log('register timer working ' + $scope.registerCounter);
-    };
+//    $scope.registerCounter = 1;
+//    $scope.resetRegTimer = function() {
+//        if( $scope.registerCounter < 30) {
+//            $scope.registerCounter++;
+//        }
+//        $scope.registerTimer = $timeout($scope.register, Math.floor(Math.random()*$scope.registerCounter+1)*1000);
+//        console.log('register timer working ' + $scope.registerCounter);
+//    };
 
-    $scope.register = function() {
-        pcResources.register($rootScope.user.realname, $rootScope.user.nickname, $rootScope.user.headimg, $scope.auth.ip, $scope.auth.port, $rootScope.user.uid, $scope.auth.token).then(function(resp){
-            try{
-                if( resp.data.code == 0 ) { 
-                    $scope.auth.connected = true;
-                    //$interval.cancel($scope.registerTimer);
-                    $scope.registerCounter = 1;
-                    $scope.registerTimer = null;
-                    $rootScope.showToast('教师机连接成功！');
-                    return;
-                } 
-                $scope.resetRegTimer();
-            } catch(err) {
-                $scope.resetRegTimer();
-            }
-        }, function(err){
-            $rootScope.showToast('无法连接教师机，请检查网络设置！');
-            $scope.resetRegTimer();
-        });
-    };
 
 
     $scope.$watch('auth', function() {
@@ -605,12 +725,78 @@ angular.module('courseControllers', ['courseServices'])
                 $scope.auth.sid = resp.data.data.sid;
                 $scope.auth.token = resp.data.data.token;
                 $rootScope.showToast('已激活，并获得IP和端口信息！');
+                //$scope.register();
             }
         });
     };
 })
 
-.controller('chatController', function($scope, pcResources, $timeout, $rootScope){
+.controller('chatController', function($scope, $q, pcResources, $timeout, $rootScope){
+    $scope.messages = [];
+
+    $scope.input = {};
+
+    $scope.work = function() {
+        $scope.listenTimer = $timeout($scope.listen, 1000);
+    };
+
+    $scope.cancelListen = $q.defer(); 
+    $scope.reg.register('chatroom', $scope.work); 
+
+    $scope.leaveRoom = function() {
+        console.log('leave room, cleaning');
+        if( $scope.cancelListen ) {
+            $scope.cancelListen.resolve();
+        }
+        $scope.reg.unregister();
+    }
+
+    $rootScope.user.leaveRoomCall = $scope.leaveRoom;
+    //$scope.$on('$stateChangeStart', function(e, to, toParams, from, fromParams){
+    //    console.log('unregister and cancel http requests');
+    //    if( $scope.cancelListen ) {
+    //        $scope.cancelListen.resolve();
+    //    }
+    //    $scope.reg.unregister();
+    //});
+
+    $scope.listen = function(){
+        if( !$scope.auth.ip ) {
+            $rootScope.showToast('还未连接上教师机，无法操作！');
+            return;
+        }
+        pcResources.listen($scope.cancelListen.promise, $scope.auth.ip, $scope.auth.port, $rootScope.user.uid, $scope.auth.token).then(function(resp){
+            if( resp.data.code == 0 ) {
+                if( resp.data.data )
+                    $scope.messages.push(resp.data.data);
+                $scope.listen();
+            }  else {
+                $rootScope.showToast('无法获得聊天数据，' + resp.data.msg);
+            }
+        }, function(err){
+            $rootScope.showToast('获取数据失败，请确保网络连接正常！');
+        }) 
+    };
+
+
+    $scope.chat = function() {
+        if( !$scope.input.message || $scope.input.message.trim() == '') return;
+        if( !$scope.auth.ip ) {
+            $rootScope.showToast('还未连接上教师机，无法操作！');
+            return;
+        }
+        var v = $scope.input.message;
+        $scope.input.message = '';
+        pcResources.chat(v, $scope.auth.ip, $scope.auth.port, $rootScope.user.uid, $scope.auth.token).then(function(resp){
+            if( resp.data.code != 0 ) {
+                $rootScope.showToast('无法发言!');
+                $scope.input.message = v;
+            }
+        }, function(err){
+            $scope.input.message = v;
+            $rootScope.showToast('获取数据失败，请确保网络连接正常！');
+        });
+    }
 })
 
 .controller('infoController', function($scope, $http, $location){

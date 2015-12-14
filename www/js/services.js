@@ -38,7 +38,7 @@ angular.module('courseServices', [])
                            url:server + '/api/qr/list/' + sId,
                            method:"GET",
                            headers: {
-                           "Authorization":"Bearer " + token
+                            "Authorization":"Bearer " + token
                            }
                        });
                    },
@@ -94,6 +94,35 @@ angular.module('courseServices', [])
 
 .factory('pcResources', function($http, $cordovaFileTransfer){
     return {
+        chat: function(msg, server, port, uid, token ) {
+                    return $http({
+                        url:'http://' + server + ':' + port + '/chat',
+                        params:{"msg":msg},
+                        headers: {
+                            id:uid,
+                            token:token
+                        }
+                    });
+        },
+        listen: function(cancel, server, port, uid, token) {
+                    return $http({
+                        url:'http://' + server + ':' + port + '/listen',
+                        timeout: cancel,
+                        headers: {
+                            id: uid,
+                            token: token
+                        }
+                    });
+        },
+        gameover: function(server, port, uid, token) {
+                    return $http({
+                        url:'http://'+server+':'+port+'/gameover',
+                        headers:{
+                            id: uid,
+                            token: token
+                        }
+                    });
+        },
         upload: function(name, ext, path, server, port, uid, token) {
                     var options = {
                         fileName:name + ext, 
@@ -106,10 +135,25 @@ angular.module('courseServices', [])
                     };
                     return $cordovaFileTransfer.upload('http://' + server + ':' + port + '/upload', path, options);
         },
-        watch: function( server, port ) {
+        fastwatch: function( server, port, uid, token ) {
+                    return $http({
+                        url: 'http://' + server + ':' + port + '/fastwatch',
+                        method:'GET',
+                        headers: {
+                            id: uid,
+                            token: token
+                        }
+                    });
+        },
+        watch: function( cancel, server, port, uid, token ) {
                     return $http({
                         url:'http://'+server+':'+port+'/watch',
-                        method:'GET'
+                        timeout: cancel, 
+                        method:'GET',
+                        headers: {
+                            id:uid,
+                            token:token
+                        }
                     });
         },
         pptslides: function( server, port, uid, token ) {
@@ -189,15 +233,16 @@ angular.module('courseServices', [])
                             } 
                         });
                     },
-        register: function(uname, nickname, headimg, server, port, uid, token) {
+        register: function(qtype, uname, nickname, headimg, server, port, uid, token) {
                    var ulr = 'http://' + server + ':' + port;
                    return $http({
                        url: ulr + '/register',
                        method: 'GET',
                        params:{
-                           uname:uname,
-                           nickname:nickname,
-                           headimg:headimg
+                            qtype:qtype,
+                            uname:uname,
+                            nickname:nickname,
+                            headimg:headimg
                        },
                        headers:{
                            id: uid,
@@ -205,6 +250,16 @@ angular.module('courseServices', [])
                        }
                    });
                },
+        unregister: function(server, port, uid, token) {
+                    return $http({
+                        url: 'http://' + server + ':' + port +'/unregister',
+                        method:'GET',
+                        headers:{
+                            id: uid,
+                            token: token
+                        }
+                    });
+        },
         pcdownload: function(url, server, port, uid, token) {
                         var u = 'http://' + server + ':' + port + '/downloadppt';
                         return $http({
