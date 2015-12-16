@@ -84,6 +84,7 @@ angular.module('courseControllers', ['courseServices'])
                     $scope.courseSessions[i].tag = $scope.courseSessions[i].name[0];
                 else
                     $scope.courseSessions[i].tag = '?';
+                $scope.courseSessions[i].tagcls = ('class-name-' + (i%6 + 1));
             }
         } else {
             $rootScope.showToast('获取课程数据失败！');
