@@ -77,6 +77,14 @@ angular.module('courseControllers', ['courseServices'])
     courseSessionResources.cslist($rootScope.server, $rootScope.token).then(function(resp){
         if( resp.data.code == 0 ) {
             $scope.courseSessions = resp.data.data; 
+            for( var i=0; i<$scope.courseSessions.length; i++ ) {
+                if( $scope.courseSessions[i].name )
+                    $scope.courseSessions[i].name = $scope.courseSessions[i].name.trim();
+                if( $scope.courseSessions[i].name.length > 0 )
+                    $scope.courseSessions[i].tag = $scope.courseSessions[i].name[0];
+                else
+                    $scope.courseSessions[i].tag = '?';
+            }
         } else {
             $rootScope.showToast('获取课程数据失败！');
         }
