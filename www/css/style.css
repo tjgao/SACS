@@ -340,7 +340,7 @@ background: linear-gradient(to bottom,  #80e5f9 0%,#80e5f9 60%,#fcebbf 100%);
 }
 
 .image-login img {
-  max-width: 80%;
+  max-width: 70%;
   margin: 5% 0;
 }
 
@@ -383,4 +383,38 @@ background: linear-gradient(to bottom,  #80e5f9 0%,#80e5f9 60%,#fcebbf 100%);
 
 .tab-title {
   font-size: 1.3em;
+}
+
+.class-name-1 {
+  background: #fee487;
+}
+
+.class-name-2 {
+  background: #0ad092;
+}
+
+.class-name-3 {
+  background: #2cbfdf;
+}
+
+.class-name-4 {
+  background: #658ae2;
+}
+
+.class-name-5 {
+  background: #76e055;
+}
+
+.class-name-6 {
+  background: #f2988c;
+}
+
+.class-name-1, .class-name-2, .class-name-3, .class-name-4, .class-name-5, .class-name-6 {
+  border-radius: 50%;
+  color: #fff;
+  font-size: 30px;
+  width: 45px;
+  height: 45px;
+  line-height: 45px;
+  text-align: center;
 }

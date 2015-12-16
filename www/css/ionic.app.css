@@ -5932,8 +5932,8 @@ a.subdued {
     .bar.bar-stable.bar-footer {
       background-image: linear-gradient(180deg, #b2b2b2, #b2b2b2 50%, transparent 50%); }
   .bar.bar-positive {
-    border-color: #1b6fb7;
-    background-color: #1b6fb7;;
+    border-color: #81e5e5;
+    background-color: #81e5e5;;
     color: #fff; }
     .bar.bar-positive .title {
       color: #fff; }
@@ -6352,7 +6352,7 @@ a.subdued {
   justify-content: center;
   -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
-  background-color: #81e5e5;
+  background-color: #1b6fb7;
   color: #fff;
   position: absolute;
   bottom: 0;
@@ -6977,7 +6977,7 @@ ion-tabs.tabs-color-active-positive .tab-item {
   color: #fff;
   padding: 3px 0; }
   ion-tabs.tabs-color-active-positive .tab-item.tab-item-active, ion-tabs.tabs-color-active-positive .tab-item.active, ion-tabs.tabs-color-active-positive .tab-item.activated {
-    background: #1b6fb7;
+    background: #2d85d0;
     color: #fff;
     padding: 3px 0; }
 
