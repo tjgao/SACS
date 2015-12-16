@@ -241,7 +241,7 @@ img.profile-pic.right {
 }
 
 input, textarea, .item-input, .item-input-wrapper {
-  background-color: #f4f4f4 !important;
+  background-color: #ffffff !important;
 }
 
 .bold {
@@ -326,4 +326,61 @@ a.autolinker {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center, center;
+}
+
+.page-login {
+  background: #80e5f9; 
+background: -moz-linear-gradient(top,  #80e5f9 0%, #80e5f9 60%, #fcebbf 100%); 
+background: -webkit-linear-gradient(top,  #80e5f9 0%,#80e5f9 60%,#fcebbf 100%); 
+background: linear-gradient(to bottom,  #80e5f9 0%,#80e5f9 60%,#fcebbf 100%); 
+}
+
+.image-login {
+  text-align: center;
+}
+
+.image-login img {
+  max-width: 80%;
+  margin: 5% 0;
+}
+
+.login-form {
+  width: 70%;
+  margin: 0 auto;
+}
+
+.login-form .item-input {
+    -webkit-border-radius: 2px;
+-moz-border-radius: 2px;
+    border-radius: 2px;
+}
+
+.btn-green {
+  background: #29af1a;
+  -webkit-border-radius: 2px;
+-moz-border-radius: 2px;
+    border-radius: 2px;
+    border: none;
+    color: #ffffff;
+    font-size: 1.2em;
+}
+
+.btn-green:hover, .btn-green.active, .btn-green.activated {
+  background:#3bd629;
+}
+
+.f12 {
+  font-size: 1.2em !important;
+}
+
+.m5 {
+  margin-bottom: 5px;
+}
+
+.f-grey {
+  color: #656565 !important;
+}
+
+.tab-title {
+  font-size: 1.3em;
 }

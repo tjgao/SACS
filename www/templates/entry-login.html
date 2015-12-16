@@ -1,14 +1,16 @@
 <ion-view hide-nav-bar="true">
-<ion-content class="padding">
-<div class="list list-inset">
-<label class="item item-input">
-    <span class="input-label">用户名</span>
-    <input type="text" ng-model="userinfo.username" required ng-disabled="logging">
+<ion-content class="page-login">
+
+<div class="image-login">
+    <img src="img/login-img.png">  
+</div>
+<div class="list list-inset login-form animated fadeInDown">
+<label class="item item-input m5">
+    <input type="text" ng-model="userinfo.username" required ng-disabled="logging" class="f12 f-grey">
 </label>
 
 <label class="item item-input">
-    <span class="input-label">密码</span>
-    <input type="password" ng-model="userinfo.pwd" ng-disabled="logging">
+    <input type="password" ng-model="userinfo.pwd" ng-disabled="logging" class="f12 f-grey" placeholder="密码">
 </label>
 
 <!--
@@ -20,9 +22,9 @@
 </div>
 -->
 
-    <button class="button button-block button-positive" 
+    <button class="button button-block btn-green" 
         ng-click="login()" >
-        登入
+        登&nbsp;&nbsp;录
     </button>
 </div>
 </ion-content>
