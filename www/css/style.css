@@ -353,6 +353,9 @@ background: linear-gradient(to bottom,  #80e5f9 0%,#80e5f9 60%,#fcebbf 100%);
     -webkit-border-radius: 2px;
 -moz-border-radius: 2px;
     border-radius: 2px;
+      border-color: #6fa0a1;
+  border-width: 1px;
+  border-style: solid;
 }
 
 .btn-green {
@@ -417,4 +420,9 @@ background: linear-gradient(to bottom,  #80e5f9 0%,#80e5f9 60%,#fcebbf 100%);
   height: 45px;
   line-height: 45px;
   text-align: center;
+}
+
+.green-bg {
+  background: #1bcd5b;
+  color: #fff;
 }
