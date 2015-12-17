@@ -426,3 +426,26 @@ background: linear-gradient(to bottom,  #80e5f9 0%,#80e5f9 60%,#fcebbf 100%);
   background: #1bcd5b;
   color: #fff;
 }
+
+.color-line {
+  border-color: #81e5e5;
+  border-bottom-width: 1px;
+  border-style: dashed;
+}
+
+.white-line {
+  border-color: #fff;
+  border-top-width: 1px;
+  border-style: dashed;
+}
+
+.grey-line  {
+  border-color: #f5f5f5;
+  border-bottom-width: 1px;
+  border-style: dashed;
+}
+
+.color-bg {
+  background: #81e5e5 !important;
+  color: #fff !important;
+}

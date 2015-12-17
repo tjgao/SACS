@@ -21,26 +21,26 @@
 <div ng-if="identity.iamlecturer==0 && !signature.signed" class="item item-divider item-icon-right">
     未签到
 </div>
-<div ng-if="identity.iamlecturer==1" class="item item-icon-left" ng-click="toggleppt()">
-    <i class="icon icon-file-powerpoint-o"></i>
+<div ng-if="identity.iamlecturer==1" class="item item-icon-left color-line" ng-click="toggleppt()">
+    <i class="icon ion-ios-monitor-outline"></i>
     PPT开关
 </div>
 
-<div ng-if="identity.iamlecturer==1" class="item item-icon-left" ng-click="togglepic()">
-    <i class="icon ion-image"></i>
+<div ng-if="identity.iamlecturer==1" class="item item-icon-left color-line" ng-click="togglepic()">
+    <i class="icon ion-ios-camera-outline"></i>
     图片开关
 </div>
 <div class="item item-icon-left" ng-click="watchslide()">
-    <i class="icon ion-monitor"></i>
+    <i class="icon ion-ios-compose-outline"></i>
     上课
 </div>
-<div class="item item-divider" ng-if="courseSession.swlist.length > 0">
+<div class="item item-divider color-bg" ng-if="courseSession.swlist.length > 0">
     课件
 </div>
-<div class="item item-icon-right item-icon-left" ng-repeat="csw in courseSession.swlist">
+<div class="item item-icon-right item-icon-left color-bg white-line" ng-repeat="csw in courseSession.swlist">
     <i class="icon ion-ios-download-outline" ng-click="download('{{csw.filename}}')"></i>
     <div ng-click="download('{{csw.filename}}')">{{csw.name}}</div>
-    <i ng-if="identity.iamlecturer==1" class="icon icon-arrow-circle-right" ng-click="pcdownload('{{csw.filename}}')"></i>
+    <i ng-if="identity.iamlecturer==1" class="icon ion-ios-cloud-download-outline" ng-click="pcdownload('{{csw.filename}}')"></i>
 </div>
 </ion-list> 
 </ion-content>
