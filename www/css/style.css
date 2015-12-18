@@ -472,3 +472,20 @@ background: linear-gradient(to bottom,  #80e5f9 0%,#80e5f9 60%,#fcebbf 100%);
   max-width: 70% !important;
   margin:0 auto;
 }
+
+.bg-grey {
+  background: #f5f5f5 !important;
+}
+
+.white {
+  color: #fff !important;
+}
+
+.h22:before {
+  line-height: 22px !important;
+}
+
+.h22 {
+  line-height: 22px !important;
+  margin-bottom: 5px;
+}

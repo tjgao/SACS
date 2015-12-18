@@ -16,16 +16,16 @@
 
 <ion-side-menu side="right">
 <header class="bar bar-header bar-stable">
-<h1 class="title">菜单</h1>
+<h1 class="title">上课操作</h1>
 </header>
 <ion-content class="has-header">
 <div class="list">
-    <div class="item item-icon-left" ng-click="scanobj.scan()" menu-close><i class="icon ion-qr-scanner"></i>扫描</div>
-    <div class="item item-icon-left" ng-if="identity.iamlecturer==1"  ng-click="toggleAttend()" menu-close><i class="icon icon-qrcode"></i>考勤开关</div>
+    <div class="item item-icon-left" ng-click="scanobj.scan()" menu-close><i class="icon ion-ios-barcode-outline"></i>扫描</div>
+    <div class="item item-icon-left bg-grey" ng-if="identity.iamlecturer==1"  ng-click="toggleAttend()" menu-close><i class="icon ion-ios-alarm-outline"></i>考勤开关</div>
     <div class="item item-icon-left" ng-if="identity.iamlecturer==1" ng-click="uploadToPC()" menu-close><i class="icon ion-ios-upload-outline"></i>上传到PC</div>
-    <div class="item item-icon-left" ng-if="identity.iamlecturer==1" ng-click="uploadToServer('server')" menu-close><i class="icon ion-ios-upload"></i>上传课件到服务器</div>
-    <div class="item item-icon-left" ng-click="chat()" menu-close><i class="icon ion-chatbubbles"></i>聊天室</div>
-    <div class="item item-icon-left" ng-if="identity.iamlecturer==1" ng-click="gameover()" menu-close><i class="icon ion-power"></i>关机下课</div>
+    <div class="item item-icon-left bg-grey" ng-if="identity.iamlecturer==1" ng-click="uploadToServer('server')" menu-close><i class="icon ion-ios-cloud-upload-outline"></i>上传课件到服务器</div>
+    <div class="item item-icon-left" ng-click="chat()" menu-close><i class="icon ion-ios-chatboxes-outline"></i>课堂讨论</div>
+    <div class="item item-icon-left bg-grey" ng-if="identity.iamlecturer==1" ng-click="gameover()" menu-close><i class="icon ion-ios-reload"></i>关机下课</div>
 </div>
 </ion-content>
 </ion-side-menu>

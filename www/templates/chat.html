@@ -1,4 +1,4 @@
-<ion-view view-title="聊天室" cache-view="false">
+<ion-view view-title="课堂讨论" cache-view="false">
 <ion-content>
 <div class="message-wrapper" ng-repeat="msg in messages">
     <div ng-if="$root.user.uid != msg.uid">
@@ -27,10 +27,10 @@
 </div>
 <ion-footer-bar class="bar-stable item-input-inset message-footer bar bar-footer">
 <label class="item-input-wrapper">
-<textarea row='1' ng-model="input.message" minlength='1' maxlength='500' placeholder='消息正文' style="overflow: hidden; word-wrap: break-word; resize: none; height: 20px; width:100%;"></textarea>
+<textarea row='1' ng-model="input.message" minlength='1' maxlength='500' placeholder='请输入内容' style="overflow: hidden; word-wrap: break-word; resize: none; height: 20px; width:100%;"></textarea>
 </label>
 <div class="footer-btn-wrapper" style="width:40px;">
-<button class="button button-icon icon ion-android-send footer-btn" ng-disabled="!input.message || input.message.trim() == ''" ng-click="chat()"></button>
+<button class="button button-icon icon ion-android-send footer-btn white h22" ng-disabled="!input.message || input.message.trim() == ''" ng-click="chat()"></button>
 </div>
 </ion-footer-bar>
 </ion-content>
