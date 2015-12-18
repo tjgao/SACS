@@ -1,19 +1,19 @@
 <ion-view view-title="写消息">
 <ion-content>
 <div class="list list-inset">
-    <label class="item item-input">
+    <label class="item item-input padding20 grey-line">
         <span class="input-label force-width60">标题</span>
-        <input type="text" placeholder="标题", ng-model="compose.title">
+        <input type="text" placeholder="请输入标题", ng-model="compose.title">
     </label>
-    <label class="item item-input">
+    <label class="item item-input padding20 grey-line">
         <span class="input-label force-width60">收件人</span>
-        <input type="text" placeholder="收件人", ng-model="compose.receiverString" class="force-readonly force-padding-right20" readonly ng-click="contacts()">
-        <button class="button button-clear icon-left"><i class="icon ion-plus" ng-click="contacts()"></i></button>
+        <input type="text" placeholder="请输入或选择收件人", ng-model="compose.receiverString" class="force-readonly force-padding-right20" readonly ng-click="contacts()">
+        <button class="button button-clear icon-left"><i class="icon ion-ios-plus-outline" ng-click="contacts()"></i></button>
     </label>
-    <label class="item item-input">
-        <textarea rows="20" ng-model="compose.content" placeholder="正文"></textarea>
+    <label class="item item-input padding20">
+        <textarea rows="20" ng-model="compose.content" placeholder="请输入正文"></textarea>
     </label>
-        <button class="button button-block btn-green" ng-click="send()">发送</button>
+        <button class="button button-block btn-green width70" ng-click="send()">发送</button>
 </div>
 
 </ion-content>

@@ -6035,7 +6035,7 @@ a.subdued {
       font-size: 17px; }
       .bar .button.button-icon .icon:before, .bar .button.button-icon:before, .bar .button.button-icon.icon-left:before, .bar .button.button-icon.icon-right:before {
         vertical-align: top;
-        font-size: 32px;
+        font-size: 24px;
         line-height: 32px; }
     .bar .button.button-clear {
       padding-right: 2px;
@@ -6043,7 +6043,7 @@ a.subdued {
       font-weight: 300;
       font-size: 17px; }
       .bar .button.button-clear .icon:before, .bar .button.button-clear.icon:before, .bar .button.button-clear.icon-left:before, .bar .button.button-clear.icon-right:before {
-        font-size: 32px;
+        font-size: 24px;
         line-height: 32px; }
     .bar .button.back-button {
       display: block;
@@ -9171,8 +9171,8 @@ input[type="checkbox"][readonly] {
     border-color: #ddd; }
   .checkbox input:checked:before,
   .checkbox input:checked + .checkbox-icon:before {
-    background: #387ef5;
-    border-color: #387ef5; }
+    background: #1bcd5b;
+    border-color: #1bcd5b; }
 
 .checkbox-light input:before,
 .checkbox-light .checkbox-icon:before {
@@ -9914,11 +9914,11 @@ progress {
     pointer-events: none; }
   .button .icon:before, .button.icon:before, .button.icon-left:before, .button.icon-right:before {
     display: inline-block;
-    padding: 0 0 1px 0;
     vertical-align: inherit;
-    font-size: 24px;
-    line-height: 41px;
-    pointer-events: none; }
+    font-size: 22px;
+    line-height: 22px;
+    pointer-events: none;
+    margin-right:3px; }
   .button.icon-left:before {
     float: left;
     padding-right: .2em;

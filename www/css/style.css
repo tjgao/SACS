@@ -449,3 +449,26 @@ background: linear-gradient(to bottom,  #80e5f9 0%,#80e5f9 60%,#fcebbf 100%);
   background: #81e5e5 !important;
   color: #fff !important;
 }
+
+.btn-reply {
+  background: #29af1a;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  border: none;
+  color: #ffffff;
+  padding: 5px 8px;
+}
+
+.btn-reply:hover, .btn-reply.active, .btn-reply.activated {
+  background:#3bd629;
+}
+
+.padding20 {
+  padding: 5px 20px !important;
+}
+
+.width70 {
+  max-width: 70% !important;
+  margin:0 auto;
+}
