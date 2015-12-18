@@ -145,6 +145,15 @@ angular.module('starter', ['ionic', 'ionic-toast', 'courseControllers', 'courseS
             }
         }   
     })
+    .state('main.infocontent', {
+        url:'/info/:iId',
+        views:{
+            'infoView':{
+                templateUrl:'templates/info-content.html',
+                controller:'infoController'
+            }
+        }
+    })
     .state('main.messages',{
         url:'/messages',
         views:{

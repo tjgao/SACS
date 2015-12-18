@@ -808,7 +808,9 @@ angular.module('courseControllers', ['courseServices'])
     }
 })
 
-.controller('infoController', function($scope, $http, $location){
+.controller('infoController', function($scope, $stateParams, $http, $location){
+    $scope.iId = $stateParams.iId; 
+    $scope.compare = function(iId) { return $scope.iId == iId; }
 })
 
 .controller('messagesController', function($scope, $rootScope, $http, $location, $ionicPopover, messageResources){
