@@ -89,6 +89,11 @@ angular.module('starter', ['ionic', 'ionic-toast', 'courseControllers', 'courseS
   // Set up the various states which the app can be in.
   // Each state's controller can be found in controllers.js
   $stateProvider
+    .state('intro', {
+        url:'/intro',
+        templateUrl:'templates/entry-intro.html',
+        controller:'introController'
+    })
     .state('login',{
         url:'/login',
         templateUrl:'templates/entry-login.html',
@@ -194,7 +199,7 @@ angular.module('starter', ['ionic', 'ionic-toast', 'courseControllers', 'courseS
     ;
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/login');
+  $urlRouterProvider.otherwise('/intro');
 
 })
 .directive('hideTabs', function($rootScope) {

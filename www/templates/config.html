@@ -1,8 +1,23 @@
 <ion-view view-title="设定">
 <ion-content>
-<ion-list>
-<ion-item>
-</ion-item>
-</ion-list>
+<div class="list">
+	<div class="item item-avatar">
+		<img src="img/default.png">
+		<h2>{{$root.user.realname}}</h2>
+		<p>{{$root.user.uniname}} {{$root.user.deptname}}</p>
+	</div>
+	<div class="item item-icon-left">
+		<i class="icon ion-ios-telephone-outline"></i>	
+		{{$root.user.mobile}}
+	</div>
+	<div class="item item-icon-left">
+		<i class="icon ion-ios-email-outline"></i>	
+		{{$root.user.email}}
+	</div>
+	<a class="item item-icon-left" onclick="alert('测试期间禁用密码修改!')">
+		<i class="icon ion-ios-locked-outline"></i>	
+		修改密码
+	</a>
+</div>
 </ion-content>
 </ion-view>

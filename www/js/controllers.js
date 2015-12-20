@@ -17,12 +17,28 @@ angular.module('courseControllers', ['courseServices'])
         if( to.name != 'main.course.chat' && from.name == 'main.course.chat') {
             if( $rootScope.user.leaveRoomCall ) $rootScope.user.leaveRoomCall(); 
         }
+        if( to.name != 'main.course.content' && from.name == 'main.course.content') {
+            if( $rootScope.user.leaveCourseCall ) $rootScope.user.leaveCourseCall();
+        }
+        if( to.name == 'intro') {
+            viewed = $localStorage.get('intro-viewed',false);
+            if( viewed ) $location.path('/login');
+        }
     });
 
 })
 
+.controller('introController', function($scope, $localStorage, $location){
+    $scope.trace = {};
+    $scope.trace.viewed = $localStorage.get('intro-viewed',false);
+    $scope.done = function() {
+        //if( !$scope.trace.viewed ) 
+        //    $localStorage.set('intro-viewed', true);
+        $location.path('/login');
+    }
+    if( $scope.trace.viewed ) $location.path('/login');
+})
 .controller('loginController', function($scope, $rootScope, $http, $location, $localStorage){
-    console.log('loginController called');
     if( !$rootScope.server ) {
         $http.get('https://raw.githubusercontent.com/tjgao/SpringBoard/master/server.json').then(function(resp){
             $rootScope.server = resp.data.server;
@@ -53,6 +69,11 @@ angular.module('courseControllers', ['courseServices'])
                     $rootScope.user.uid = data.data.uid;
                     $rootScope.user.realname = data.data.realname;
                     $rootScope.user.nickname = data.data.nickname;
+                    $rootScope.user.mobile = data.data.mobile;
+                    $rootScope.user.email = data.data.email;
+                    $rootScope.user.uniname= data.data.uniname;
+                    $rootScope.user.deptname = data.data.deptname;
+                    $rootScope.user.pid = data.data.pid ;
                     if( data.data.headimg ) {
                         $rootScope.user.headimg = $rootScope.server + '/' + $rootScope.user.headimg;
                     } else 
@@ -500,17 +521,10 @@ angular.module('courseControllers', ['courseServices'])
         });
     };
 
-    $scope.$on('$stateChangeStart', function(e, to, toParams, from, fromParams){
-//        if( to.name == 'main.list') {
-            if( $scope.activeTimer )
-                $timeout.cancel($scope.activeTimer);
-//            if( $scope.registerTimer )
-//                $timeout.cancel($scope.registerTimer);
-//            console.log('go back to upper level');
-//       }
-//        if( to.name == 'main.course.chat')
-//            console.log('goto chat now');
-    });
+    $rootScope.user.leaveCourseCall = function() {
+        if( $scope.activeTimer )
+            $timeout.cancel($scope.activeTimer);
+    };
 
     $scope.activated = function() {
         if( $scope.auth && $scope.auth.ip && $scope.auth.port ) {
