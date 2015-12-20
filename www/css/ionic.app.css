@@ -8634,18 +8634,19 @@ button.item.item-button-right {
 
 .slider-pager {
   position: absolute;
-  bottom: 20px;
+  bottom: 15px;
   z-index: 1;
   width: 100%;
   height: 15px;
   text-align: center; }
   .slider-pager .slider-pager-page {
     display: inline-block;
-    margin: 0px 3px;
+    margin: 0px 2px;
     width: 15px;
-    color: #000;
+    color: #fff;
     text-decoration: none;
-    opacity: 0.3; }
+    opacity: 0.3;
+    font-size: 10px; }
     .slider-pager .slider-pager-page.active {
       -webkit-transition: opacity 0.4s ease-in;
       transition: opacity 0.4s ease-in;

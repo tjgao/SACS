@@ -1,16 +1,22 @@
 <ion-view hide-nav-bar="true">
 <ion-slide-box on-slide-changed="slideChanged(index)">
-<ion-slide>
-<h3>你要哪门弄?   1</h3>
-<button ng-click="done()">不看了</button>
+<ion-slide class="intro-1">
+<div class="intro-img">
+	<img src="../img/intro-1.png">
+</div>
 </ion-slide>
-<ion-slide>
-<h3>你要哪门弄?   2</h3>
-<button ng-click="done()">不看了</button>
+<ion-slide class="intro-2">
+<div class="intro-img">
+	<img src="../img/intro-2.png">
+</div>
 </ion-slide>
-<ion-slide>
-<h3>你要哪门弄?   3</h3>
-<button ng-click="done()">不看了</button>
+<ion-slide class="intro-3">
+<div class="intro-img">
+	<img src="../img/intro-3.png">
+</div>
+<div class="enter-div">
+<button ng-click="done()" class="enter-button">立即进入</button>
+</div>
 </ion-slide>
 </ion-slide-box>
 </ion-view>

@@ -489,3 +489,66 @@ background: linear-gradient(to bottom,  #80e5f9 0%,#80e5f9 60%,#fcebbf 100%);
   line-height: 22px !important;
   margin-bottom: 5px;
 }
+
+.intro-1 {
+  background: #2c9dde; 
+background: -moz-linear-gradient(top,  #2c9dde 44%, #ffe486 96%); 
+background: -webkit-linear-gradient(top,  #2c9dde 44%,#ffe486 96%); 
+background: linear-gradient(to bottom,  #2c9dde 44%,#ffe486 96%); 
+text-align: center;
+vertical-align: middle;
+padding: 40px 0;
+}
+
+.intro-2 {
+  background: #fee486; 
+background: -moz-linear-gradient(top,  #fee486 10%, #01b87e 100%); 
+background: -webkit-linear-gradient(top,  #fee486 10%,#01b87e 100%); 
+background: linear-gradient(to bottom,  #fee486 10%,#01b87e 100%);
+text-align: center;
+vertical-align: middle;
+padding: 40px 0;
+}
+
+.intro-3 {
+  background: #02b8a1; 
+background: -moz-linear-gradient(top,  #02b8a1 0%, #fef3cb 69%, #6489e0 100%); 
+background: -webkit-linear-gradient(top,  #02b8a1 0%,#fef3cb 69%,#6489e0 100%); 
+background: linear-gradient(to bottom,  #02b8a1 0%,#fef3cb 69%,#6489e0 100%); 
+text-align: center;
+vertical-align: middle;
+padding: 40px 0;
+}
+
+.intro-img {
+  max-width: 70%;
+  max-height: 80%;
+  margin: auto;
+}
+
+.intro-img img{
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.enter-div {
+  margin: 0 auto;
+      position: absolute;
+    bottom: 30px;
+    height: 32px;
+    width: 30%;
+    left: 35%;
+}
+
+.enter-button {
+  border: 1px solid #fff;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  background: none;
+  color:#fff;
+  font-size: 1em;
+  width: 100%;
+  height: 100%;
+  
+}
