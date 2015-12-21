@@ -1,30 +1,33 @@
 <ion-view view-title="课堂讨论" cache-view="false">
 <ion-content>
-<div class="message-wrapper" ng-repeat="msg in messages">
-    <div ng-if="$root.user.uid != msg.uid">
-        <div class="chat-bubble left">
-            <div class="message">{{msg.text}}</div>
-            <div class="message-detail">
-                <span class="bold">——  {{msg.realname}}</span>
-                <span am-time-ago="msg.time"></span>
+    <div class="message-wrapper" ng-repeat="msg in messages">
+        <div ng-if="$root.user.uid != msg.uid">
+            <div class="chat-bubble left">
+                <div class="message">{{msg.text}}</div>
             </div>
+            <div class="message-detail left">
+                <img ng-if="msg.headimg == null || msg.headimg==''" class="profile-pic" ng-src="img/default.png"/>
+                <!--<img ng-if="msg.headimg != null" class="profile-pic" ng-src="{{msg.headimg}}"/>-->
+                <span class="chat-name">{{msg.realname}}</span>
+                <!--<span am-time-ago="msg.time"></span>-->
+            </div>
+            <div class="clear"></div>
         </div>
-        <img ng-if="msg.headimg == null || msg.headimg==''" class="profile-pic left" ng-src="img/default.png"/>
-        <img ng-if="msg.headimg != null" class="profile-pic left" ng-src="{{msg.headimg}}"/>
-    </div>
 
-    <div ng-if="$root.user.uid == msg.uid">
-        <div class="chat-bubble right">
-            <div class="message">{{msg.text}}</div>
-            <div class="message-detail">
-                <span class="bold">——  {{msg.realname}}</span>
+        <div ng-if="$root.user.uid == msg.uid">
+            <div class="message-detail right">
+                <img ng-if="msg.headimg == null || msg.headimg==''" class="profile-pic" ng-src="img/default.png"/>
+                <!--<img ng-if="msg.headimg != null" class="profile-pic" ng-src="{{msg.headimg}}"/>-->
+                <span class="chat-name">{{msg.realname}}</span>
                 <!-- <span am-time-ago="msg.time"></span> -->
             </div>
+            <div class="chat-bubble right">
+                <div class="message">{{msg.text}}</div>
+            </div>
+            <div class="clear"></div>
         </div>
-        <img ng-if="msg.headimg == null || msg.headimg==''" class="profile-pic right" ng-src="img/default.png"/>
-        <img ng-if="msg.headimg != null" class="profile-pic right" ng-src="{{msg.headimg}}"/>
     </div>
-</div>
+</ion-content>
 <ion-footer-bar class="bar-stable item-input-inset message-footer bar bar-footer">
 <label class="item-input-wrapper">
 <textarea row='1' ng-model="input.message" minlength='1' maxlength='500' placeholder='请输入内容' style="overflow: hidden; word-wrap: break-word; resize: none; height: 20px; width:100%;"></textarea>
@@ -33,5 +36,5 @@
 <button class="button button-icon icon ion-android-send footer-btn white h22" ng-disabled="!input.message || input.message.trim() == ''" ng-click="chat()"></button>
 </div>
 </ion-footer-bar>
-</ion-content>
+
 </ion-view>
