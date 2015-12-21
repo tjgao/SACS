@@ -14,15 +14,19 @@ angular.module('courseControllers', ['courseServices'])
     });
 
     $scope.$on('$stateChangeStart', function(e, to, toParams, from, fromParams){
+        console.log( to.name + ' ' + from.name)
         if( to.name != 'main.course.chat' && from.name == 'main.course.chat') {
             if( $rootScope.user.leaveRoomCall ) $rootScope.user.leaveRoomCall(); 
         }
         if( to.name != 'main.course.content' && from.name == 'main.course.content') {
             if( $rootScope.user.leaveCourseCall ) $rootScope.user.leaveCourseCall();
         }
+        if( to.name == 'main.course.content' && from.name != 'main.course.content') {
+            if( $rootScope.user.enterCourseCall ) $rootScope.user.enterCourseCall(); 
+        }
         if( to.name == 'intro') {
             viewed = $localStorage.get('intro-viewed',false);
-            //if( viewed ) $location.path('/login');
+            if( viewed ) $location.path('/login');
         }
     });
 
@@ -32,11 +36,11 @@ angular.module('courseControllers', ['courseServices'])
     $scope.trace = {};
     $scope.trace.viewed = $localStorage.get('intro-viewed',false);
     $scope.done = function() {
-        //if( !$scope.trace.viewed ) 
-        //    $localStorage.set('intro-viewed', true);
+        if( !$scope.trace.viewed ) 
+            $localStorage.set('intro-viewed', true);
         $location.path('/login');
     }
-    //if( $scope.trace.viewed ) $location.path('/login');
+    if( $scope.trace.viewed ) $location.path('/login');
 })
 .controller('loginController', function($scope, $rootScope, $http, $location, $localStorage){
     if( !$rootScope.server ) {
@@ -92,7 +96,6 @@ angular.module('courseControllers', ['courseServices'])
 })
 
 .controller('clistsController', function($scope, $http, $location, $rootScope, courseSessionResources){
-    console.log('clistsController called');
     $scope.courseSessions = [];
 
     courseSessionResources.cslist($rootScope.server, $rootScope.token).then(function(resp){
@@ -131,10 +134,10 @@ angular.module('courseControllers', ['courseServices'])
         $scope.courseSession = {};
         $scope.auth = {};
         $scope.identity = {};
-        $scope.uploadFile = {};
+        //$scope.uploadFile = {};
         $scope.signature = {signed:false};
-        $scope.chat = {};
-        $scope.scanobj = {};
+        //$scope.chat = {};
+        //$scope.scanobj = {};
     }
 
     $scope.$on('ionicView.enter', function(){
@@ -533,10 +536,21 @@ angular.module('courseControllers', ['courseServices'])
     };
 
     $rootScope.user.leaveCourseCall = function() {
-        if( $scope.activeTimer )
+        if( $scope.activeTimer ) {
             $timeout.cancel($scope.activeTimer);
+            $scope.activeTimer = null;
+        }
     };
 
+    
+
+    $rootScope.user.enterCourseCall = function() {
+        console.log("enterCourseCall");
+        if( !$scope.activeTimer ) {
+            $scope.activeTimer = $timeout($scope.activated, 500);
+            $scope.activeCounter = 1;        
+        }
+    }
     $scope.activated = function() {
         if( $scope.auth && $scope.auth.ip && $scope.auth.port ) {
             //$interval.cancel($scope.activeTimer);
@@ -569,6 +583,9 @@ angular.module('courseControllers', ['courseServices'])
         console.log('active timer is working');
     }
 
+    $scope.activeTimer = $timeout($scope.activated, 500);
+    $scope.activeCounter = 1;    
+
     $scope.resetActiveTimer = function() {
         if( $scope.activeCounter < 30) {
             $scope.activeCounter++;
@@ -577,9 +594,6 @@ angular.module('courseControllers', ['courseServices'])
         $scope.activeTimer = $timeout($scope.activated, Math.floor(Math.random()*$scope.activeCounter + 1)*1000);
         console.log('active timer working ' + $scope.activeCounter);
     };
-
-    $scope.activeTimer = $timeout($scope.activated, 500);
-    $scope.activeCounter = 1;
 
 //    $scope.registerCounter = 1;
 //    $scope.resetRegTimer = function() {
