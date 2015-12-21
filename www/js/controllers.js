@@ -22,7 +22,7 @@ angular.module('courseControllers', ['courseServices'])
         }
         if( to.name == 'intro') {
             viewed = $localStorage.get('intro-viewed',false);
-            if( viewed ) $location.path('/login');
+            //if( viewed ) $location.path('/login');
         }
     });
 
@@ -36,7 +36,7 @@ angular.module('courseControllers', ['courseServices'])
         //    $localStorage.set('intro-viewed', true);
         $location.path('/login');
     }
-    if( $scope.trace.viewed ) $location.path('/login');
+    //if( $scope.trace.viewed ) $location.path('/login');
 })
 .controller('loginController', function($scope, $rootScope, $http, $location, $localStorage){
     if( !$rootScope.server ) {
@@ -339,7 +339,7 @@ angular.module('courseControllers', ['courseServices'])
 
 .controller('courseSessionController', function($scope, $stateParams, $http, $location, $rootScope, courseSessionResources, 
     $cordovaFileTransfer, $cordovaBarcodeScanner, $ionicPlatform, authResources, $cordovaFile, pcResources, $timeout, 
-    $ionicModal, $ionicScrollDelegate, $ionicSlideBoxDelegate, $q){
+    $ionicModal, $ionicScrollDelegate, $ionicSlideBoxDelegate, $q, $ionicPopup){
 
     $scope.contentInit = function() {
         $scope.courseSession.sid = $stateParams.sId;
@@ -492,6 +492,17 @@ angular.module('courseControllers', ['courseServices'])
             if( resp.data.code == 0 )
             console.log('toggle ppt');
         });
+    }
+
+    $scope.showConfirm = function() {
+        $ionicPopup.confirm({
+            title:'提示',
+            subTitle:'确定退出程序？',
+            okText:'退 出',
+            okType:'button-positive',
+            cancelText:'取 消'
+        }).then(function(res){
+        });        
     }
 
     $scope.togglepic = function() {
@@ -754,7 +765,7 @@ angular.module('courseControllers', ['courseServices'])
     };
 })
 
-.controller('chatController', function($scope, $q, pcResources, $timeout, $rootScope){
+.controller('chatController', function($scope, $ionicScrollDelegate, $q, pcResources, $timeout, $rootScope){
     $scope.messages = [];
 
     $scope.input = {};
@@ -790,8 +801,10 @@ angular.module('courseControllers', ['courseServices'])
         }
         pcResources.listen($scope.cancelListen.promise, $scope.auth.ip, $scope.auth.port, $rootScope.user.uid, $scope.auth.token).then(function(resp){
             if( resp.data.code == 0 ) {
-                if( resp.data.data )
+                if( resp.data.data ) {
                     $scope.messages.push(resp.data.data);
+                     $ionicScrollDelegate.scrollBottom();
+                }
                 $scope.listen();
             }  else {
                 $rootScope.showToast('无法获得聊天数据，' + resp.data.msg);
