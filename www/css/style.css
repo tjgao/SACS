@@ -563,7 +563,8 @@ padding: 40px 0;
   font-size: 0.8em;
   color: #656565;
   max-width: 50px;
-    line-height: 1.2em;
+  line-height: 1.2em;
+  display: block;
 }
 
 .right {

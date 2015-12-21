@@ -2,15 +2,16 @@
 <ion-content>
     <div class="message-wrapper" ng-repeat="msg in messages">
         <div ng-if="$root.user.uid != msg.uid">
-            <div class="chat-bubble left">
-                <div class="message">{{msg.text}}</div>
-            </div>
             <div class="message-detail left">
                 <img ng-if="msg.headimg == null || msg.headimg==''" class="profile-pic" ng-src="img/default.png"/>
                 <!--<img ng-if="msg.headimg != null" class="profile-pic" ng-src="{{msg.headimg}}"/>-->
                 <span class="chat-name">{{msg.realname}}</span>
                 <!--<span am-time-ago="msg.time"></span>-->
             </div>
+            <div class="chat-bubble left">
+                <div class="message">{{msg.text}}</div>
+            </div>
+            
             <div class="clear"></div>
         </div>
 
