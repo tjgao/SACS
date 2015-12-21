@@ -9873,8 +9873,8 @@ progress {
  * --------------------------------------------------
  */
 .button {
-  border-color: #b2b2b2;
-  background-color: #f8f8f8;
+  border: 0;
+  background-color: #ddd;
   color: #444;
   position: relative;
   display: inline-block;
@@ -9982,8 +9982,8 @@ progress {
         box-shadow: none;
         color: #fff; }
   .button.button-positive {
-    border-color: #0c60ee;
-    background-color: #387ef5;
+    border: 0;
+    background-color: #1bcd5b;
     color: #fff; }
     .button.button-positive:hover {
       color: #fff;
