@@ -4,7 +4,7 @@
 	<div class="item item-avatar">
 		<img src="img/default.png">
 		<h2>{{$root.user.realname}}</h2>
-		<p>{{$root.user.uniname}} {{$root.user.deptname}}</p>
+		<p>编号：&nbsp; {{$root.user.pid}}</p>
 	</div>
 	<div class="item item-icon-left">
 		<i class="icon ion-ios-telephone-outline"></i>	
@@ -14,10 +14,16 @@
 		<i class="icon ion-ios-email-outline"></i>	
 		{{$root.user.email}}
 	</div>
-	<a class="item item-icon-left" onclick="alert('测试期间禁用密码修改!')">
+	<a class="item " onclick="alert('测试期间禁用密码修改!')">
 		<i class="icon ion-ios-locked-outline"></i>	
 		修改密码
 	</a>
+	<div class="item">
+	学校：&nbsp; &nbsp;{{$root.user.uniname}}
+	</div>	
+	<div class="item">
+	科系：&nbsp; &nbsp;{{$root.user.deptname}}
+	</div>	
 </div>
 </ion-content>
 </ion-view>
