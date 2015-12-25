@@ -10,7 +10,9 @@ angular.module('courseControllers', ['courseServices'])
 
     $rootScope.user = {};
     $ionicPlatform.ready().then(function(){
-        //$cordovaFile.createDir(cordova.file.externalRootDirectory, 'CourseAgent', false);
+        try {
+            $cordovaFile.createDir(cordova.file.externalRootDirectory, 'SACS', false);
+        }catch(e){}
     });
 
     $scope.$on('$stateChangeStart', function(e, to, toParams, from, fromParams){
@@ -155,6 +157,10 @@ angular.module('courseControllers', ['courseServices'])
     $scope.chat = function() {
         //$location.path('/main/courseSession/chat/' + $scope.courseSession.sid );
         $location.path('/main/courseSession/chat');
+    }
+
+    $scope.statistics = function() {
+        $location.path('/main/courseSession/statistics/' + $scope.courseSession.sid);
     }
 
     $scope.showbtn = function() {
@@ -537,6 +543,7 @@ angular.module('courseControllers', ['courseServices'])
 
     $rootScope.user.leaveCourseCall = function() {
         if( $scope.activeTimer ) {
+            console.log('leaveCourseCall');
             $timeout.cancel($scope.activeTimer);
             $scope.activeTimer = null;
         }
@@ -545,17 +552,21 @@ angular.module('courseControllers', ['courseServices'])
     
 
     $rootScope.user.enterCourseCall = function() {
-        console.log("enterCourseCall");
+            console.log("enterCourseCall");
+        if( $scope.activeTimer ) {
+            $timeout.cancel($scope.activeTimer);
+            $scope.activeTimer = null;
+        }
         if( !$scope.activeTimer ) {
-            $scope.activeTimer = $timeout($scope.activated, 500);
-            $scope.activeCounter = 1;        
+//            $scope.activeTimer = $timeout($scope.activated, 0);
+            $scope.activeCounter = 2;        
         }
     }
     $scope.activated = function() {
         if( $scope.auth && $scope.auth.ip && $scope.auth.port ) {
             //$interval.cancel($scope.activeTimer);
             $scope.activeTimer = null;
-            $scope.activeCounter = 1;
+            $scope.activeCounter = 2;
             return;
         }
         authResources.activated($scope.courseSession.sid, $rootScope.server, $rootScope.token).then(function(resp){
@@ -591,7 +602,7 @@ angular.module('courseControllers', ['courseServices'])
             $scope.activeCounter++;
         }
         //$interval.cancel($scope.activeTimer);
-        $scope.activeTimer = $timeout($scope.activated, Math.floor(Math.random()*$scope.activeCounter + 1)*1000);
+//        $scope.activeTimer = $timeout($scope.activated, Math.floor(Math.random()*$scope.activeCounter + 1)*1000);
         console.log('active timer working ' + $scope.activeCounter);
     };
 
@@ -667,7 +678,7 @@ angular.module('courseControllers', ['courseServices'])
 
     $scope.download = function(url) {
         var filename = url.substring( url.lastIndexOf('/') + 1 );
-        var target = cordova.file.externalRootDirectory + '/CourseAgent/' + filename; 
+        var target = cordova.file.externalRootDirectory + '/SACS/' + filename; 
         var localUri = '';
         courseSessionResources.download(url, target, $rootScope.server).then(function(entry){
             $rootScope.showToast('文件成功下载！');
@@ -847,6 +858,19 @@ angular.module('courseControllers', ['courseServices'])
             $rootScope.showToast('获取数据失败，请确保网络连接正常！');
         });
     }
+})
+
+.controller('statisticsController', function($scope, $rootScope, $stateParams, courseSessionResources) {
+    $scope.sId = $stateParams.sId;
+    courseSessionResources.attendstat($scope.sId, $rootScope.server, $rootScope.token).then(function(resp){
+        if( resp.data.code != 0 ) {
+            $rootScope.showToast('获取数据失败！');
+        } else {
+            $scope.students = resp.data.data;
+        }
+    }, function(err){
+        $rootScope.showToast('获取数据失败，请确保网络连接正常！');
+    });
 })
 
 .controller('infoController', function($scope, $stateParams, $http, $location){

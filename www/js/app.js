@@ -141,6 +141,15 @@ angular.module('starter', ['ionic', 'ionic-toast', 'courseControllers', 'courseS
             }
         }
     })
+    .state('main.course.statistics',{
+        url:'/statistics/:sId',
+        views:{
+            'courseContentView':{
+                templateUrl:'templates/statistics.html',
+                controller:'statisticsController'
+            }
+        }
+    })
     .state('main.info',{
         url:'/info',
         views:{

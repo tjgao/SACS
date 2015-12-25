@@ -328,6 +328,15 @@ angular.module('courseServices', [])
                                 "Authorization":"Bearer " + token
                             } 
                         });
+                    },
+        attendstat: function(sId, server, token) {
+                        return $http({
+                            url: server + '/api/signature/statistics/' + sId,
+                            method:'GET',
+                            headers:{
+                                "Authorization":"Bearer " + token
+                            }
+                        });
                     }
     };
 })

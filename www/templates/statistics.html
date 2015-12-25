@@ -1,0 +1,13 @@
+<ion-view  id="courseSessionView" view-title="{{courseSession.name}}"  cache-view="false">
+<ion-nav-title>
+考勤统计
+</ion-nav-title>
+<ion-content >
+<ion-list>
+<div class="item " ng-repeat="p in students" ng-if="p.privilege == 0">
+	{{p.realname}} 
+	<span class="item-note"> {{p.actualAttend}}/{{p.shouldAttend}} </span>
+</div>
+</ion-list>
+</ion-content>
+</ion-view>
