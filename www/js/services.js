@@ -135,6 +135,18 @@ angular.module('courseServices', [])
                     };
                     return $cordovaFileTransfer.upload('http://' + server + ':' + port + '/upload', path, options);
         },
+        uphand: function(name, ext, path, server, port, uid, token, username) {
+                    var options = {
+                        fileName: name + ext,
+                        httpMethod:'POST',
+                        params:{ 'ext':ext, 'name':name, 'username':username},
+                        headers: {
+                            id: uid,
+                            token: token
+                        }
+                    };
+                    return $cordovaFileTransfer.upload('http://' + server + ':' + port + '/uphand', path, options);
+        },
         fastwatch: function( server, port, uid, token ) {
                     return $http({
                         url: 'http://' + server + ':' + port + '/fastwatch',
@@ -219,20 +231,57 @@ angular.module('courseServices', [])
                            }
                        });
                    },
-        toggleattend: function(attstr, sid, uid, server, port, token) {
-                        attstr = "attend:" + sid + ":" + attstr;
+        remotefiles: function(ftype, server, port, uid, token) {
                         return $http({
-                            url: 'http://' + server + ":" + port + '/toggleattend',
-                            method:'POST',
+                            url:'http://' + server + ':' + port + '/listfiles',
+                            method:'GET',
                             params:{
-                                attendstr:attstr
+                                t : ftype
                             },
-                            headers:{
+                            headers: {
                                 id: uid,
                                 token: token
-                            } 
+                            }
                         });
                     },
+        closeRemoteFiles: function(server, port, uid, token) {
+                return $http({
+                    url:'http://' + server + ':' + port + '/closeall',
+                    method:'GET',
+                    headers: {
+                        id: uid,
+                        token: token
+                    }
+                });
+
+        },
+        openRemoteFile: function(fn, server, port, uid, token) {
+                return $http({
+                    url:'http://' + server + ':' + port + '/openremotefile',
+                    method:'GET',
+                    params:{
+                        filename: fn
+                    },
+                    headers: {
+                        id: uid,
+                        token: token
+                    }
+                });
+        },
+        toggleattend: function(attstr, sid, uid, server, port, token) {
+                attstr = "attend:" + sid + ":" + attstr;
+                return $http({
+                    url: 'http://' + server + ":" + port + '/toggleattend',
+                    method:'POST',
+                    params:{
+                        attendstr:attstr
+                    },
+                    headers:{
+                        id: uid,
+                        token: token
+                    } 
+                });
+            },
         register: function(qtype, uname, nickname, headimg, server, port, uid, token) {
                    var ulr = 'http://' + server + ':' + port;
                    return $http({

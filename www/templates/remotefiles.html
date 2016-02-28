@@ -1,0 +1,23 @@
+<div class="modal">
+    <div class="bar bar-header bar-positive">
+        <h1 class="title">{{remoteFileTitle}}</h1>
+        <div class="button button-clear" ng-click="exitRemoteFiles()">
+            <span class="icon ion-ios-close-outline"></span>
+        </div>
+        <!--
+        <div class="button button-clear" ng-click="ok()">
+            <span class="icon ion-ios-checkmark-outline"></span>
+        </div>
+        -->
+    </div>
+    <ion-content class="has-header">
+    <ion-list>
+    <div class="item item-icon-right item-icon-left color-bg white-line" ng-repeat="f in remoteFileList">
+    <i ng-if="f.type=='ppt'" class="icon icon-file-powerpoint-o"></i>
+    <i ng-if="f.type=='image'" class="icon ion-image"></i>
+    <div>{{f.time*1000| date:'MM-dd HH:mm:ss '}}&nbsp;{{f.user}}</div>
+    <i class="icon ion-android-open" ng-click="openRemoteFile('{{f.filename}}')"></i>
+    </div>
+    </ion-list>
+    </ion-content>
+</div>

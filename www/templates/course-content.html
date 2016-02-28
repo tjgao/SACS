@@ -21,14 +21,17 @@
 <div ng-if="identity.iamlecturer==0 && !signature.signed" class="item item-divider item-icon-right">
     未签到
 </div>
-<div ng-if="identity.iamlecturer==1" class="item item-icon-left color-line" ng-click="toggleppt()">
+<div ng-if="identity.iamlecturer==1" class="item item-icon-left color-line" ng-click="remotefiles('_upload_')">
     <i class="icon ion-ios-monitor-outline"></i>
-    PPT开关
+    远程文件    
 </div>
-
-<div ng-if="identity.iamlecturer==1" class="item item-icon-left color-line" ng-click="togglepic()">
+<div ng-if="identity.iamlecturer==1" class="item item-icon-left color-line" ng-click="remotefiles('_uphand_')">
     <i class="icon ion-ios-camera-outline"></i>
-    图片开关
+    学生参与
+</div>
+<div ng-if="identity.iamlecturer==1" class="item item-icon-left color-line" ng-click="closeRemoteFiles()">
+    <i class="icon ion-android-radio-button-off"></i>
+    关闭远程文件
 </div>
 <div class="item item-icon-left" ng-click="watchslide()">
     <i class="icon ion-ios-compose-outline"></i>

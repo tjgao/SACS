@@ -45,14 +45,15 @@ angular.module('courseControllers', ['courseServices'])
     if( $scope.trace.viewed ) $location.path('/login');
 })
 .controller('loginController', function($scope, $rootScope, $http, $location, $localStorage){
-    if( !$rootScope.server ) {
-        $http.get('https://raw.githubusercontent.com/tjgao/SpringBoard/master/server.json').then(function(resp){
-            $rootScope.server = resp.data.server;
-            //$rootScope.server = 'http://localhost:8080/CourseAssist';
-        }, function(err){
-            $rootScope.showToast('无法获取服务器地址！');
-        });
-    }
+    //if( !$rootScope.server ) {
+    //    $http.get('https://raw.githubusercontent.com/tjgao/SpringBoard/master/server.json').then(function(resp){
+    //        $rootScope.server = resp.data.server;
+    //        //$rootScope.server = 'http://localhost:8080/CourseAssist';
+    //    }, function(err){
+    //        $rootScope.showToast('无法获取服务器地址！');
+    //    });
+    //}
+    $rootScope.server = 'http://sacclass.cn';
     $scope.userinfo = {
         username:$localStorage.get('username',''),
         pwd:$localStorage.get('pwd','')
@@ -205,11 +206,19 @@ angular.module('courseControllers', ['courseServices'])
 
         popup.then(function(res){
             if( res && res == 'upload') {
-                pcResources.upload($scope.uploadFile.name, $scope.uploadFile.ext, $scope.uploadFile.path, $scope.auth.ip, $scope.auth.port, $rootScope.user.uid, $scope.auth.token).then(function(resp){
-                    if( resp.data.code == 0 ) 
-                        $rootScope.showToast('上传成功！');
-                    else
-                        $rootScope.showToast('上传失败！');
+                var method = pcResources.upload;
+                if(!$scope.identity.iamlecturer) 
+                    method = pcResources.uphand;
+                method($scope.uploadFile.name, $scope.uploadFile.ext, $scope.uploadFile.path, $scope.auth.ip, $scope.auth.port, $rootScope.user.uid, $scope.auth.token, $rootScope.user.realname).then(function(resp){
+                    try{
+                        var v = JSON.parse(resp.response);
+                        if( v.code == 0 ) 
+                            $rootScope.showToast('上传成功！');
+                        else
+                            $rootScope.showToast('上传失败！');
+                    } catch(e) {
+                        $rootScope.showToast('获取数据失败！');
+                    }
                 }, function(err){
                     $rootScope.showToast('获取数据失败，请确保网络连接正常！');
                 });
@@ -503,6 +512,60 @@ angular.module('courseControllers', ['courseServices'])
         });
     }
 
+    $scope.exitRemoteFiles = function() {
+        $scope.modal.remove().then(function(){
+            $scope.modal = null;
+            $scope.compose = {};
+            $scope.remoteFileList = {};
+        });
+    }
+
+    $scope.openModal = function(){
+        if( $scope.modal) {
+            return $q.when();
+        } else {
+            return $ionicModal.fromTemplateUrl('templates/remotefiles.html',{
+                scope:$scope,
+                animation:'slide-in-up'
+            }).then(function(modal){
+                $scope.modal = modal;
+            });
+        }
+    };
+
+    $scope.remotefiles = function(ftype) {
+        $scope.ftype = ftype;
+        if( ftype == '_upload_')
+            $scope.remoteFileTitle = '个人文件';
+        else if( ftype == '_uphand_')
+            $scope.remoteFileTitle = '学生参与';
+        $scope.openModal().then(function() {
+            $scope.modal.show();
+            pcResources.remotefiles(ftype, $scope.auth.ip, $scope.auth.port, $rootScope.user.uid, $scope.auth.token).then(function(resp){
+                if( resp.data.code == 0 ) {
+                    $scope.remoteFileList = resp.data.data;
+                } else {
+                    $rootScope.showToast('获取远程文件列表失败！');
+                } 
+            });
+        });
+    }
+
+    $scope.closeRemoteFiles = function() {
+        pcResources.closeRemoteFiles($scope.auth.ip, $scope.auth.port, $rootScope.user.uid, $scope.auth.token).then(function(resp){
+            if( resp.data.code == 0 ) {
+            } else {
+                $rootScope.showToast('操作失败！');                
+            }   
+        }) 
+    };
+    $scope.openRemoteFile = function(fn) {
+        pcResources.openRemoteFile(fn, $scope.auth.ip, $scope.auth.port, $rootScope.user.uid, $scope.auth.token).then(function(resp){
+            if( resp.data.code != 0 ) {
+                $rootScope.showToast('操作失败!');
+            }
+        })
+    };
     $scope.showConfirm = function() {
         $ionicPopup.confirm({
             title:'提示',
