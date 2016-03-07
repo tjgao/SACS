@@ -24,6 +24,15 @@ angular.module('courseServices', [])
 
 .factory('authResources', function($http){
     return {
+        chgpwd: function(server, token, newpwd, oldpwd ) {
+            return $http({
+                url: server + '/api/user/chgpwd/' + oldpwd + '/' + newpwd,
+                method:'POST',
+                headers: {
+                  "Authorization":"Bearer " + token
+                }
+            });
+        },
         activate: function(sId, code, server, token) {
                       return $http({
                           url: server + '/api/qr/scan/' + code + '/' + sId,
@@ -387,6 +396,35 @@ angular.module('courseServices', [])
                             }
                         });
                     }
+    };
+})
+
+.factory('infoService', function($http){
+    return {
+        listinfo: function(server, token, uniid, deptid) {
+            return $http({
+                url:server + '/api/information/listAll',
+                method:'GET',
+                params:{
+                    uniid : uniid,
+                    deptid: deptid,
+                    start : 0,
+                    limit : 1000000
+                },
+                headers: {
+                    "Authorization":"Bearer " + token
+                }
+            });
+        },
+        getinfo: function(server, token, iid ) {
+            return $http({
+                url: server + '/api/information/getinfo/' + iid,
+                method:'GET',
+                headers: {
+                    "Authorization":"Bearer " + token
+                }
+            });
+        }
     };
 })
 

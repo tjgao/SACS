@@ -1,7 +1,6 @@
 angular.module('courseControllers', ['courseServices'])
 
 .controller('topController', function($scope,$location, ionicToast, $ionicLoading, $localStorage, $rootScope, $cordovaFile, $ionicPlatform){
-    console.log('topController called');
     $rootScope.showToast = function(msg) {
         ionicToast.show(msg, 'middle', false, 2000);
     };
@@ -29,6 +28,8 @@ angular.module('courseControllers', ['courseServices'])
         if( to.name == 'intro') {
             viewed = $localStorage.get('intro-viewed',false);
             if( viewed ) $location.path('/login');
+        } else if(from.name != 'login') {
+            if( !$rootScope.user || !$rootScope.token ) $location.path('/login');
         }
     });
 
@@ -53,7 +54,8 @@ angular.module('courseControllers', ['courseServices'])
     //        $rootScope.showToast('无法获取服务器地址！');
     //    });
     //}
-    $rootScope.server = 'http://sacclass.cn';
+    $rootScope.server = 'http://sacclass.com';
+    //$rootScope.server = 'http://localhost:8080';
     $scope.userinfo = {
         username:$localStorage.get('username',''),
         pwd:$localStorage.get('pwd','')
@@ -80,6 +82,8 @@ angular.module('courseControllers', ['courseServices'])
                     $rootScope.user.email = data.data.email;
                     $rootScope.user.uniname= data.data.uniname;
                     $rootScope.user.deptname = data.data.deptname;
+                    $rootScope.user.uniid = data.data.uniid;
+                    $rootScope.user.deptid = data.data.deptid;
                     $rootScope.user.pid = data.data.pid ;
                     if( data.data.headimg ) {
                         $rootScope.user.headimg = $rootScope.server + '/' + $rootScope.user.headimg;
@@ -936,9 +940,37 @@ angular.module('courseControllers', ['courseServices'])
     });
 })
 
-.controller('infoController', function($scope, $stateParams, $http, $location){
+.controller('infoController', function($scope, $rootScope, $stateParams, $http, $location, infoService){
+    $scope.posts = null;
+    $scope.getallposts = function() {
+        infoService.listinfo($rootScope.server, $rootScope.token, $rootScope.user.uniid, $rootScope.user.deptid).then(function(resp){
+            try {
+                if( resp.data.code == 0 ) {
+                    $scope.posts = resp.data.data;
+                    for( var i = 0; i < $scope.posts.length; i++ ) {
+                        $scope.posts[i].tagcls = ('class-name-' + (i%6 + 3));
+                    }
+                } else {
+                    $rootScope.showToast('获取数据失败！');
+                }
+            } catch(e) {}
+        }, function(err) { $rootScope.showToast('获取数据失败，请确保网络连接正常！'); });
+    }
+    $scope.getallposts();
     $scope.iId = $stateParams.iId; 
-    $scope.compare = function(iId) { return $scope.iId == iId; }
+    $scope.getpost = function(iid) {
+        infoService.getinfo($rootScope.server, $rootScope.token, iid ).then(function(resp){
+            try{
+                if( resp.data.code == 0 ) {
+                    $scope.post = resp.data.data;
+                } else {
+                    $rootScope.showToast('获取数据失败！');
+                }
+            } catch(e) {}
+        });
+    };
+    if( $scope.iId ) $scope.getpost($scope.iId);
+    else $scope.post = null;
 })
 
 .controller('messagesController', function($scope, $rootScope, $http, $location, $ionicPopover, messageResources){
@@ -1138,7 +1170,44 @@ angular.module('courseControllers', ['courseServices'])
 
 })
 
-.controller('configController', function($scope, $http){
+.controller('configController', function($scope, $rootScope,$ionicPopup, $http, authResources ){
+    $scope.pwd = {};
+    $scope.chgpwd = function() {
+        var popup = $ionicPopup.show({
+            templateUrl:'templates/chgpwd.html',
+            title:'修改密码',
+            scope:$scope,
+            buttons:[{text:'取消'},{
+                text:'<b>确定</b>',
+                type:'button-positive',
+                onTap: function(e) {
+                    if( !$scope.pwd.oldpwd ) {
+                        $rootScope.showToast('未输入旧密码！');
+                        e.preventDefault();
+                        return;
+                    } if( !$scope.pwd.newpwd1 || !$scope.pwd.newpwd2 || $scope.pwd.newpwd1.length < 6 || $scope.pwd.newpwd1 != $scope.pwd.newpwd2 ) {
+                        $rootScope.showToast('新密码不能为空，长度不小于6，两次输入必须相同！');
+                        e.preventDefault();
+                        return;
+                    }
+                    return 'OK';
+                }
+            }]
+        });
+
+        popup.then(function(res){
+            if( res && res == 'OK') {
+                authResources.chgpwd($rootScope.server, $rootScope.token, $scope.pwd.newpwd1, $scope.pwd.oldpwd).then(function(resp){
+                    if( resp.data.code == 0 ) {
+                        $rootScope.showToast('密码修改成功！');
+                    } else 
+                        $rootScope.showToast('密码修改失败！');
+                });
+                $scope.pwd = {};
+            }
+
+        });
+    };
 })
 ;
 
