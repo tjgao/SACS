@@ -361,7 +361,15 @@ angular.module('courseControllers', ['courseServices'])
 
 .controller('courseSessionController', function($scope, $stateParams, $http, $location, $rootScope, courseSessionResources, 
     $cordovaFileTransfer, $cordovaBarcodeScanner, $ionicPlatform, authResources, $cordovaFile, pcResources, $timeout, 
-    $ionicModal, $ionicScrollDelegate, $ionicSlideBoxDelegate, $q, $ionicPopup){
+    $ionicModal, $ionicScrollDelegate, $ionicSlideBoxDelegate, $q, $ionicPopup, $ionicLoading){
+    $scope.show = function() {
+        $ionicLoading.show({
+            template: '载入中...'
+        });
+    };
+    $scope.hide = function(){
+        $ionicLoading.hide();
+    };
 
     $scope.contentInit = function() {
         $scope.courseSession.sid = $stateParams.sId;
@@ -545,13 +553,15 @@ angular.module('courseControllers', ['courseServices'])
             $scope.remoteFileTitle = '学生参与';
         $scope.openModal().then(function() {
             $scope.modal.show();
+            $scope.show(); 
             pcResources.remotefiles(ftype, $scope.auth.ip, $scope.auth.port, $rootScope.user.uid, $scope.auth.token).then(function(resp){
+                $scope.hide();
                 if( resp.data.code == 0 ) {
                     $scope.remoteFileList = resp.data.data;
                 } else {
                     $rootScope.showToast('获取远程文件列表失败！');
                 } 
-            });
+            }, function(err){ $scope.hide(); });
         });
     }
 
@@ -747,7 +757,9 @@ angular.module('courseControllers', ['courseServices'])
         var filename = url.substring( url.lastIndexOf('/') + 1 );
         var target = cordova.file.externalRootDirectory + '/SACS/' + filename; 
         var localUri = '';
+        $scope.show();
         courseSessionResources.download(url, target, $rootScope.server).then(function(entry){
+            $scope.hide();
             $rootScope.showToast('文件成功下载！');
             localUri = entry.toURL();
             if( ionic.Platform.isIOS()) {
@@ -759,6 +771,7 @@ angular.module('courseControllers', ['courseServices'])
                 });
             }
         }, function(err){
+            $scope.hide();
             $rootScope.showToast('无法下载此文件！');
         });
     }
